@@ -31,26 +31,26 @@ function addImplicitRefs(appdef: AppDef): AppDef{
     return appdef
 }
 
-function createWidget(attribute:Attribute){
+function createWidget(attribute:Attribute, element:HTMLElement):Widget<any>{
     var widget:Widget<any>
     switch (attribute.enumType) {
         case 'boolean':
-            widget = new BooleanWidget(null)
+            widget = new BooleanWidget(element)
             break;
         case 'number':
-            widget = new NumberWidget(null)
+            widget = new NumberWidget(element)
             break;
         case 'date':
-            widget = new DateWidget(null)
+            widget = new DateWidget(element)
             break;
         case 'id':
-            widget = new IDWidget(null)
+            widget = new IDWidget(element,attribute as IdentityAttribute)
             break;
         case 'pointer':
-            widget = new PointerWidget(null)
+            widget = new PointerWidget(element)
             break;
         default://text
-            widget = new TextWidget(null)
+            widget = new TextWidget(element)
             break;
     }
     return widget

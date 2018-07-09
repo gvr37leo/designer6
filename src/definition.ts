@@ -67,6 +67,7 @@ class NumberAttribute extends Attribute{
 //         this.enumtypes = enumtypes
 //     }
 // }
+
 class TextAttribute extends Attribute{
     constructor(_id: string, name: string, belongsToObject: string){
         super(_id, name, belongsToObject, 'text')

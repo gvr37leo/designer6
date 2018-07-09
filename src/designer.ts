@@ -68,12 +68,13 @@ class Designer{
             var obj = objnamemap.get(res[1])
             var id = res[2]
             get(obj.name,id).then(val => {
-                new DetailView(this.viewcontainer, obj, id).renderDetailView().load(val)
+                new DetailView(this.viewcontainer, obj).renderDetailView(id).load(val)
             })
             
         })
 
-        this.router.trigger(window.location.pathname)
+        // this.router.trigger(window.location.pathname)
+        new DetailView(this.viewcontainer, appdef.objdefinitions[0]).renderCreateView()
 
         // window.addEventListener('', e => {
         //     this.router.trigger('')
