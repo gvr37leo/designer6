@@ -30,13 +30,13 @@ class Attribute{
     _id:string
     name: string
     belongsToObject:string
-    enumType:string
+    dataType:string
 
-    constructor(_id:string, name: string,belongsToObject:string,enumType:string){
+    constructor(_id:string, name: string,belongsToObject:string,dataType:string){
         this._id = _id
         this.name = name
         this.belongsToObject = belongsToObject
-        this.enumType = enumType
+        this.dataType = dataType
     }
 
     static makeAttributeFromObject

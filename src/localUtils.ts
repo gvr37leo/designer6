@@ -21,7 +21,7 @@ function addImplicitRefs(appdef: AppDef): AppDef{
     for(var attribute of appdef.attributes){
         objmap.get(attribute.belongsToObject).attributes.push(attribute)
 
-        if(attribute.enumType == 'pointer'){
+        if(attribute.dataType == 'pointer'){
             var referencedObject = objmap.get((attribute as PointerAttribute).pointsToObject)
             var arrayAttribute = new ArrayAttribute(null,attribute.name,attribute.belongsToObject,referencedObject._id)
             referencedObject.attributes.push(arrayAttribute)
@@ -33,7 +33,7 @@ function addImplicitRefs(appdef: AppDef): AppDef{
 
 function createWidget(attribute:Attribute, element:HTMLElement):Widget<any>{
     var widget:Widget<any>
-    switch (attribute.enumType) {
+    switch (attribute.dataType) {
         case 'boolean':
             widget = new BooleanWidget(element)
             break;

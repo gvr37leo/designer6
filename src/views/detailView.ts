@@ -80,9 +80,13 @@ class DetailView{
         
 
         for(var attribute of objdef.attributes){
-            var widget = createWidget(attribute,this.widgetcontainer)
-            widget.value.onchange.listen(val => this.data[attribute.name] = val)
-            this.widgetmap.set(attribute._id,widget)
+            if(attribute.dataType == 'array'){
+
+            }else{
+                var widget = createWidget(attribute,this.widgetcontainer)
+                widget.value.onchange.listen(val => this.data[attribute.name] = val)
+                this.widgetmap.set(attribute._id,widget)
+            }
         }
     }
 
