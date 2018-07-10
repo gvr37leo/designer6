@@ -17,6 +17,7 @@ class ObjDef{
     name:string
     attributes:Attribute[] = []
     dropdownAttribute:string
+    referencedAttributes:Attribute[] = []
 
     constructor(_id: string, name: string, dropdownAttribute: string){
         this._id = _id

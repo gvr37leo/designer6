@@ -80,13 +80,16 @@ class DetailView{
         
 
         for(var attribute of objdef.attributes){
-            if(attribute.dataType == 'array'){
+            var widget = createWidget(attribute,this.widgetcontainer)
+            widget.value.onchange.listen(val => this.data[attribute.name] = val)
+            this.widgetmap.set(attribute._id,widget)
+        }
 
-            }else{
-                var widget = createWidget(attribute,this.widgetcontainer)
-                widget.value.onchange.listen(val => this.data[attribute.name] = val)
-                this.widgetmap.set(attribute._id,widget)
-            }
+        for(var attribute of objdef.referencedAttributes){
+            var button = new Button(attribute.name,'default',() => {
+
+            })
+            this.tabscontainer.appendChild(button.element)
         }
     }
 
