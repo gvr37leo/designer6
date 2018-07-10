@@ -1,7 +1,9 @@
 class GridView{
     objdef: ObjDef;
+    element: HTMLElement;
     
-    constructor(anchor:HTMLElement, objdef:ObjDef){
+    constructor(objdef:ObjDef){
+        this.element = string2html('')
         this.objdef = objdef
     }
 

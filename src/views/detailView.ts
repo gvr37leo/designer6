@@ -1,5 +1,6 @@
 /// <reference path="../definition.ts" />
 /// <reference path="../button.ts" />
+/// <reference path="tabs.ts" />
 
 
 class DetailView{
@@ -25,6 +26,7 @@ class DetailView{
     widgetcontainer: HTMLElement;
     tabscontainer: HTMLElement;
     widgetmap: Map<string, Widget<any>>;
+    tabs: Tabs;
         
 
 
@@ -50,6 +52,7 @@ class DetailView{
     renderDetailView(id:string):DetailView{
         this.id = id
         this.renderTemplate()
+        this.tabs = new Tabs(this.tabscontainer)
 
         this.renderWidgets(this.objdef)
         get(this.objdef.name,this.id).then(data => {
@@ -85,11 +88,11 @@ class DetailView{
             this.widgetmap.set(attribute._id,widget)
         }
 
+        
         for(var attribute of objdef.referencedAttributes){
-            var button = new Button(attribute.name,'default',() => {
-
-            })
-            this.tabscontainer.appendChild(button.element)
+            
+            this.tabs.addTab(attribute.name,new GridView(attribute.belongsToObject))
+            
         }
     }
 
