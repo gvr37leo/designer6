@@ -1,8 +1,8 @@
 /// <reference path="definition.ts" />
 
 
-function create(pointertype:string, data:any){
-    return httpCall(`/api/search/${pointertype}`,{
+function create(objname:string, data:any){
+    return httpCall(`/api/${objname}`,{
         headers:{
             'Content-Type': 'application/json'
         },
@@ -11,12 +11,12 @@ function create(pointertype:string, data:any){
     })
 }
 
-function get(pointertype:string, id:string):Promise<any>{
-    return getList(pointertype,{filter:{_id:id},sort:undefined,paging:{skip:0,limit:10}})
+function get(objname:string, id:string):Promise<any>{
+    return getList(objname,{filter:{_id:id},sort:undefined,paging:{skip:0,limit:10}})
 }
 
-function getList(pointertype:string, query:Query):Promise<any>{
-    return httpCall(`/api/search/${pointertype}`, {
+function getList(objname:string, query:Query):Promise<any>{
+    return httpCall(`/api/search/${objname}`, {
         headers:{
             'Content-Type': 'application/json'
         },
@@ -25,8 +25,8 @@ function getList(pointertype:string, query:Query):Promise<any>{
     })
 }
 
-function update(pointertype:string, id:string, data:any){
-    return httpCall(`/api/${pointertype}/${id}`,{
+function update(objname:string, id:string, data:any){
+    return httpCall(`/api/${objname}/${id}`,{
         headers:{
             'Content-Type': 'application/json'
         },
@@ -35,8 +35,8 @@ function update(pointertype:string, id:string, data:any){
     })
 }
 
-function del(pointertype:string, id:string){
-    return httpCall(`/api/${pointertype}/${id}`,{
+function del(objname:string, id:string){
+    return httpCall(`/api/${objname}/${id}`,{
         headers:{
             'Content-Type': 'application/json'
         },
