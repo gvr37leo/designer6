@@ -23,8 +23,7 @@ function addImplicitRefs(appdef: AppDef): AppDef{
 
         if(attribute.dataType == 'pointer'){
             var referencedObject = objmap.get((attribute as PointerAttribute).pointsToObject)
-            var arrayAttribute = new ArrayAttribute(null,attribute.name,attribute.belongsToObject,referencedObject._id)
-            referencedObject.referencedAttributes.push(arrayAttribute)
+            referencedObject.referencedAttributes.push(attribute as PointerAttribute)
         }
     }
 

@@ -82,16 +82,22 @@ class DetailView{
     renderWidgets(objdef:ObjDef){
         
 
-        for(var attribute of objdef.attributes){
+        for(let attribute of objdef.attributes){
             var widget = createWidget(attribute,this.widgetcontainer)
             widget.value.onchange.listen(val => this.data[attribute.name] = val)
             this.widgetmap.set(attribute._id,widget)
         }
 
         
-        for(var attribute of objdef.referencedAttributes){
+        for(let referencedAttribute of objdef.referencedAttributes){
             
-            this.tabs.addTab(attribute.name,new GridView(attribute.belongsToObject))
+            this.tabs.addTab(referencedAttribute.name, () => {
+                var columns:Column<any>[] = []
+
+
+                var table = new Table(columns)
+                table.load([])
+            })
             
         }
     }

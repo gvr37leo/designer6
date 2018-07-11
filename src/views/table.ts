@@ -1,34 +1,75 @@
+/// <reference path="../../node_modules/eventsystemx/EventSystem.ts" />
+
+
 class Table<T>{
-    fieldRenderers: ((obj: T) => void)[];
+    columns: Column<T>[];
+    orderDesc:Box<boolean>;
+    orderedColumn:Box<number>;
+
+    element: HTMLTableElement;
+    head: HTMLTableSectionElement;
+    body: HTMLTableSectionElement;
+    titlerow: HTMLTableRowElement;
+    filterrow: HTMLTableRowElement;
 
     
 
-    constructor(fieldRenderers:((obj:T) => void)[]){
-        this.fieldRenderers = fieldRenderers
+    constructor(columns:Column<T>[]){
+        this.columns = columns
+        this.element = string2html(`
+            <table>
+                <thead>
+                    <tr id="titlerow"></tr>
+                    <tr id="filterrow"></tr>
+                </thead>
+                <tbody></tbody>
+            </table>`) as HTMLTableElement
+        this.head = this.element.querySelector('thead')
+        this.titlerow = this.head.querySelector('#titlerow')
+        this.filterrow = this.head.querySelector('#filterrow')
+        this.body = this.element.querySelector('tbody')
+        this.addHeader()
     }
 
-    render(objects:T[]){
+    addHeader(){
+        for(var column of this.columns){
+            var cell = this.createTableCell(this.titlerow)
+            cell.innerText = column.name
+
+            var cell2 = this.createTableCell(this.filterrow)
+            cell2.appendChild(column.filterRenderer())
+        }
+    }
+
+    load(objects:T[]){
+
         for(var object of objects){
-            for(var fieldRenderer of this.fieldRenderers){
-                fieldRenderer(object)
+            var row = document.createElement('tr')
+            this.body.appendChild(row)            
+            for(var column of this.columns){
+                var cell = document.createElement('td')
+                row.appendChild(cell)
+                cell.appendChild(column.renderer(object))
             }
         }
     }
 
-}
-
-class Cat{
-    name:string
-    age:number
-}
-
-var table = new Table<Cat>([
-    cat => {
-        cat.name
-    },
-    cat => {
-        cat.age
+    private createTableCell(row){
+        var td = document.createElement('td')
+        row.appendChild(td)
+        return td
     }
-])
 
-table.render([new Cat(), new Cat()])
+}
+
+class Column<T>{
+    name:string
+    renderer:(obj:T) => HTMLElement
+    filterRenderer:() => HTMLElement
+
+    constructor(name:string, renderer:(obj:T) => HTMLElement,filterRenderer:() => HTMLElement){
+        this.name = name
+        this.renderer = renderer
+        this.filterRenderer = filterRenderer
+    }
+}

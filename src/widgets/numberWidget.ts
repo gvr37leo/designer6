@@ -1,12 +1,21 @@
 class NumberWidget extends Widget<number>{
-    element: HTMLElement;
-    constructor(anchor:HTMLElement){
-        super(anchor)
+    inputel: HTMLInputElement;
+    
+    constructor(){
+        super()
+        this.element = string2html('<div><input type="number" /></div>')
+        this.inputel = this.element.querySelector('input')
 
-        var template = `
-            <input type="number" />
-        `
+        this.element.addEventListener('change',(e) => {
+            this.value.set(this.inputel.valueAsNumber)
+        })
 
-        this.element = createAndAppend(this.anchor,template)
+        this.value.onchange.listen((val) => {
+            this.inputel.valueAsNumber = val
+        })
+
+        this.value.onClear.listen(() => {
+            this.inputel.value = ''
+        })
     }
 }

@@ -6,12 +6,12 @@
 class TextWidget extends Widget<string>{
     inputel: HTMLInputElement;
 
-    constructor(anchor:HTMLElement){
-        super(anchor)
+    constructor(){
+        super()
+        this.element = string2html('<div><input/></div>')
+        this.inputel = this.element.querySelector('input')
 
-        this.inputel = createAndAppend(this.anchor,'<input>') as HTMLInputElement
-
-        this.inputel.addEventListener('input',(e) => {
+        this.element.addEventListener('change',(e) => {
             this.value.set(this.inputel.value)
         })
 

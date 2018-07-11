@@ -2,8 +2,8 @@ class IDWidget extends Widget<string>{
     element: HTMLElement;
     inputelement: HTMLInputElement;
     anchortag: HTMLAnchorElement;
-    constructor(anchor:HTMLElement, attribute:IdentityAttribute){
-        super(anchor)
+    constructor(attribute:IdentityAttribute){
+        super()
 
         var template = `
             <div>

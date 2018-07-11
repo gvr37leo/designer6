@@ -23,7 +23,7 @@ class Tabs{
         this.viewcontainer = this.element.querySelector('#viewcontainer')
     }
 
-    addTab(text:string,gridview:GridView){
+    addTab(text:string, onselect:() => void){
         var button = new Button(text,'default', () => {
             this.tabcontainer.innerHTML = ''
             this.tabcontainer.appendChild(gridview.element)

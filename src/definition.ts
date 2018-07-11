@@ -17,7 +17,7 @@ class ObjDef{
     name:string
     attributes:Attribute[] = []
     dropdownAttribute:string
-    referencedAttributes:Attribute[] = []
+    referencedAttributes:PointerAttribute[] = []
 
     constructor(_id: string, name: string, dropdownAttribute: string){
         this._id = _id
@@ -86,13 +86,13 @@ class IdentityAttribute extends Attribute{
 }
 
 
-class ArrayAttribute extends Attribute{
-    pointsToObject:string
-    constructor(_id: string, name: string, pointsToObject: string, belongsToObject: string){
-        super(_id, name, belongsToObject, 'array')
-        this.pointsToObject = pointsToObject
-    }
-}
+// class ArrayAttribute extends Attribute{
+//     pointsToObject:string
+//     constructor(_id: string, name: string, pointsToObject: string, belongsToObject: string){
+//         super(_id, name, belongsToObject, 'array')
+//         this.pointsToObject = pointsToObject
+//     }
+// }
 
 class PointerAttribute extends Attribute{
     pointsToObject:string

@@ -1,10 +1,8 @@
 class Widget<T>{
-
+    element: HTMLElement;
     value:Box<T>
-    anchor:HTMLElement
 
-    constructor(anchor:HTMLElement){
-        this.anchor = anchor
+    constructor(){
         this.value = new Box();
     }
 }

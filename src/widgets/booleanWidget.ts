@@ -3,13 +3,24 @@
 
 class BooleanWidget extends Widget<boolean>{
     element: HTMLElement;
-    constructor(anchor:HTMLElement){
-        super(anchor)
+    inputel: HTMLInputElement;
+    constructor(){
+        super()
 
-        var template = `
-            <input type="checkbox" />
-        `
+        this.element = string2html('<div><input type="checkbox" /></div>')
+        this.inputel = this.element.querySelector('input')
 
-        this.element = createAndAppend(this.anchor,template)
+        this.element.addEventListener('change',(e) => {
+            this.value.set(this.inputel.checked)
+        })
+
+        this.value.onchange.listen((val) => {
+            this.inputel.checked = val
+        })
+
+        this.value.onClear.listen(() => {
+            this.inputel.value = ''
+        })
+
     }
 }

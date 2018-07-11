@@ -1,4 +1,5 @@
 /// <reference path="src/designer.ts" />
+/// <reference path="src/views/table.ts" />
 
 
 var appdef = new AppDef([
@@ -21,4 +22,41 @@ var appdef = new AppDef([
     new NumberAttribute('11','salaris','3'),
 ])
 
-var designer = new Designer(document.querySelector('#main'), appdef)
+// var designer = new Designer(document.querySelector('#main'), appdef)
+
+class Cat{
+    name:string
+    age:number
+
+    constructor(name:string, age:number){
+        this.name = name
+        this.age = age
+    }
+}
+
+var table = new Table<Cat>([
+    new Column('name',cat => {
+        var widget = new TextWidget()
+        widget.value.set(cat.name)
+        widget.value.onchange.listen(val => cat.name = val)
+        return widget.element
+    }, () => {
+        var widget = new TextWidget()
+        return widget.element
+    }),
+    new Column('age',cat => {
+        var widget = new NumberWidget()
+        widget.value.set(cat.age)
+        widget.value.onchange.listen(val => cat.age = val)
+        return widget.element
+    }, () => {
+        var widget = new NumberWidget()
+        return widget.element
+    })
+])
+document.querySelector('#main').appendChild(table.element)
+
+var cats = [new Cat('piet',2), new Cat('snuffel',3)]
+table.load(cats)
+
+
