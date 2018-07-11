@@ -60,27 +60,27 @@ class Designer{
                 this.viewcontainer.appendChild(table.element)
             })
         })
-        this.router.listen(new RegExp('^/(.+)$'), res => {
+        this.router.listen(new RegExp('^/([a-zA-Z0-9]+)$'), res => {
             var obj = objnamemap.get(res[1])
 
             getList(obj.name, this.filter).then(objects => {
                 var table = createTableForObject(obj)
-                table.load(objects.data)
                 this.viewcontainer.appendChild(table.element)
+                table.load(objects.data)
             })
             
         })
-        this.router.listen(new RegExp('^/(.+)/(.+)$'), res => {
+        this.router.listen(new RegExp('^/([a-zA-Z0-9]+)/([a-zA-Z0-9]+)$'), res => {
             var obj = objnamemap.get(res[1])
             var id = res[2]
             get(obj.name,id).then(val => {
-                new DetailView(this.viewcontainer, obj).renderDetailView(id).load(val)
+                new DetailView(this.viewcontainer, obj).renderDetailView(id).load(val.data[0])
             })
             
         })
 
-        // this.router.trigger(window.location.pathname)
-        new DetailView(this.viewcontainer, appdef.objdefinitions[0]).renderCreateView()
+        this.router.trigger(window.location.pathname)
+        // new DetailView(this.viewcontainer, appdef.objdefinitions[0]).renderCreateView()
 
         // window.addEventListener('', e => {
         //     this.router.trigger('')

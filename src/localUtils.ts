@@ -11,11 +11,10 @@
 
 function addImplicitRefs(appdef: AppDef): AppDef{
     var objmap = array2map(appdef.objdefinitions, atr => atr._id)
-    var attributemap = array2map(appdef.attributes, obj => obj._id)
 
     for(var obj of appdef.objdefinitions){
-        obj.attributes.push(new IdentityAttribute(null,obj.name,obj._id))
-        obj.attributes.push(new DateAttribute(null,'lastupdate',obj._id))
+        obj.passiveAttributes.push(new IdentityAttribute(null,obj.name,obj._id))
+        obj.passiveAttributes.push(new DateAttribute(null,'lastupdate',obj._id))
     }
 
     for(var attribute of appdef.attributes){
@@ -77,7 +76,8 @@ function array2map<T,F>(array:T[], fieldSelector:(obj:T) => F):Map<F,T>{
 
 function createTableForObject<T>(obj:ObjDef):Table<T>{
     var columns:Column<any>[] = []
-    for(var attribute of obj.attributes){
+    var attributes = obj.passiveAttributes.concat(obj.attributes)
+    for(let attribute of attributes){
         columns.push(new Column(attribute.name, obj => {
             var widget = createWidget(attribute)
             widget.value.set(obj[attribute.name])
@@ -91,4 +91,8 @@ function createTableForObject<T>(obj:ObjDef):Table<T>{
     var table = new Table(columns)
 
     return table
+}
+
+function getAllAttributes(obj:ObjDef):Attribute[]{
+    return obj.passiveAttributes.concat(obj.attributes)
 }

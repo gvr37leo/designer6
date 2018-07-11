@@ -16,6 +16,7 @@ class ObjDef{
     _id:string
     name:string
     attributes:Attribute[] = []
+    passiveAttributes:Attribute[] = []
     dropdownAttribute:string
     referencedAttributes:PointerAttribute[] = []
 

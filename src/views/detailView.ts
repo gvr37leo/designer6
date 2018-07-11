@@ -40,7 +40,7 @@ class DetailView{
     renderCreateView():DetailView{
         this.renderTemplate()
 
-        this.renderWidgets(this.objdef)
+        this.renderWidgets(this.objdef.attributes)
 
         this.addButton(new Button('create','success', () => {
             create(this.objdef.name,this.data)
@@ -53,10 +53,7 @@ class DetailView{
         this.renderTemplate()
         this.tabs = new Tabs(this.tabscontainer)
 
-        this.renderWidgets(this.objdef)
-        get(this.objdef.name,id).then(data => {
-            this.load(data)
-        })
+        this.renderWidgets(this.objdef.passiveAttributes.concat(this.objdef.attributes))
 
         this.addButton(new Button('save','success', () => {
             update(this.objdef.name,id,this.data)
@@ -80,10 +77,12 @@ class DetailView{
         this.tabscontainer = document.querySelector('#tabscontainer')
     }
 
-    renderWidgets(objdef:ObjDef){
-        for(let attribute of objdef.attributes){
+    renderWidgets(attributes:Attribute[]){
+        for(let attribute of attributes){
             var widget = createWidget(attribute)
-            this.widgetcontainer.appendChild(widget.element)
+            var field = createAndAppend(this.widgetcontainer,`<div><b>${attribute.name}</b><span id="valuecontainer"></span></div>`)
+            var valuecontainer = field.querySelector('#valuecontainer')
+            valuecontainer.appendChild(widget.element)
             widget.value.onchange.listen(val => this.data[attribute.name] = val)
             this.widgetmap.set(attribute._id,widget)
         }
@@ -103,7 +102,7 @@ class DetailView{
                     },
                     sort:{},
                 }).then(data => {
-                    table.load(data)
+                    table.load(data.data)
                 })
                 return table.element
             })
@@ -124,6 +123,9 @@ class DetailView{
         for(var attribute of this.objdef.attributes){
             var widget = this.widgetmap.get(attribute._id)
             widget.value.set(this.data[attribute.name])
+        }
+        for(var attribute of this.objdef.passiveAttributes){
+            this.w
         }
     }
 

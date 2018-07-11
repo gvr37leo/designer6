@@ -11,11 +11,11 @@ function create(objname:string, data:any){
     })
 }
 
-function get(objname:string, id:string):Promise<any>{
+function get<T>(objname:string, id:string):Promise<SearchResponse<T>>{
     return getList(objname,{filter:{_id:id},sort:undefined,paging:{skip:0,limit:10}})
 }
 
-function getList(objname:string, query:Query):Promise<any>{
+function getList<T>(objname:string, query:Query):Promise<SearchResponse<T>>{
     return httpCall(`/api/search/${objname}`, {
         headers:{
             'Content-Type': 'application/json'
@@ -57,4 +57,9 @@ declare class Query{
         skip:number,
         limit:number
     }
+}
+
+declare class SearchResponse<T>{
+    data:T[]
+    collectionSize:number
 }

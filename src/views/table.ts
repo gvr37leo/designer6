@@ -1,4 +1,5 @@
 /// <reference path="../../node_modules/eventsystemx/EventSystem.ts" />
+/// <reference path="../localUtils.ts" />
 
 
 class Table<T>{
