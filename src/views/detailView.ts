@@ -18,15 +18,15 @@ class DetailView{
         </div>
     </div>
     `
-    id: string;
     anchor: HTMLElement;
     data:any = {}
+    widgetmap: Map<string, Widget<any>>;
+    tabs: Tabs;
+
     element: HTMLElement;
     buttoncontainer: HTMLElement;
     widgetcontainer: HTMLElement;
     tabscontainer: HTMLElement;
-    widgetmap: Map<string, Widget<any>>;
-    tabs: Tabs;
         
 
 
@@ -50,24 +50,25 @@ class DetailView{
     }
 
     renderDetailView(id:string):DetailView{
-        this.id = id
         this.renderTemplate()
         this.tabs = new Tabs(this.tabscontainer)
 
         this.renderWidgets(this.objdef)
-        get(this.objdef.name,this.id).then(data => {
+        get(this.objdef.name,id).then(data => {
             this.load(data)
         })
 
         this.addButton(new Button('save','success', () => {
-            update(this.objdef.name,this.id,this.data)
+            update(this.objdef.name,id,this.data)
         }))
         this.addButton(new Button('delete','warning', () => {
-            del(this.objdef.name, this.id)
+            del(this.objdef.name, id)
         }))
         this.addButton(new Button('refresh','info', () => {
-            this.refresh()
+            this.refresh(id)
         }))
+
+        this.renderTables(this.objdef)
 
         return this
     }
@@ -80,22 +81,20 @@ class DetailView{
     }
 
     renderWidgets(objdef:ObjDef){
-        
-
         for(let attribute of objdef.attributes){
             var widget = createWidget(attribute)
             this.widgetcontainer.appendChild(widget.element)
             widget.value.onchange.listen(val => this.data[attribute.name] = val)
             this.widgetmap.set(attribute._id,widget)
         }
+    }
 
-        
+    renderTables(objdef:ObjDef){
         for(let referencedAttribute of objdef.referencedAttributes){
+            var ownerOfReferencedAttribute:ObjDef = window.objidmap.get(referencedAttribute.belongsToObject)
             
             this.tabs.addTab(referencedAttribute.name, () => {
-                var ownerOfReferencedAttribute:ObjDef = window.objidmap.get(referencedAttribute.belongsToObject)
                 var table = createTableForObject(ownerOfReferencedAttribute)
-
                 getList(ownerOfReferencedAttribute.name,{
                     filter:{},
                     paging:{
@@ -106,7 +105,7 @@ class DetailView{
                 }).then(data => {
                     table.load(data)
                 })
-                
+                return table.element
             })
             
         }
@@ -116,8 +115,8 @@ class DetailView{
         this.buttoncontainer.appendChild(button.element)
     }
 
-    refresh(){
-        get(this.objdef.name,this.id).then(data => this.load(data)) 
+    refresh(id){
+        get(this.objdef.name,id).then(data => this.load(data)) 
     }
 
     load(data:any){

@@ -46,7 +46,7 @@ function createWidget(attribute:Attribute):Widget<any>{
             widget = new IDWidget(attribute as IdentityAttribute)
             break;
         case 'pointer':
-            widget = new PointerWidget()
+            widget = new PointerWidget(attribute as PointerAttribute)
             break;
         default://text
             widget = new TextWidget()

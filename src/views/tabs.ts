@@ -22,14 +22,10 @@ class Tabs{
         this.viewcontainer = this.element.querySelector('#viewcontainer')
     }
 
-    addTab(text:string, onselect:() => void){
+    addTab(text:string, onselect:() => HTMLElement){
         var button = new Button(text,'default', () => {
-            onselect()
+            this.viewcontainer.replaceChild(onselect(),this.viewcontainer.children[0])
         })
         this.tabcontainer.appendChild(button.element)
-    }
-
-    selectTab(){
-        
     }
 }
