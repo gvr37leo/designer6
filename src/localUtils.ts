@@ -30,26 +30,26 @@ function addImplicitRefs(appdef: AppDef): AppDef{
     return appdef
 }
 
-function createWidget(attribute:Attribute, element:HTMLElement):Widget<any>{
+function createWidget(attribute:Attribute):Widget<any>{
     var widget:Widget<any>
     switch (attribute.dataType) {
         case 'boolean':
-            widget = new BooleanWidget(element)
+            widget = new BooleanWidget()
             break;
         case 'number':
-            widget = new NumberWidget(element)
+            widget = new NumberWidget()
             break;
         case 'date':
-            widget = new DateWidget(element)
+            widget = new DateWidget()
             break;
         case 'id':
-            widget = new IDWidget(element,attribute as IdentityAttribute)
+            widget = new IDWidget(attribute as IdentityAttribute)
             break;
         case 'pointer':
-            widget = new PointerWidget(element)
+            widget = new PointerWidget()
             break;
         default://text
-            widget = new TextWidget(element)
+            widget = new TextWidget()
             break;
     }
     return widget
@@ -73,4 +73,22 @@ function array2map<T,F>(array:T[], fieldSelector:(obj:T) => F):Map<F,T>{
         map.set(fieldSelector(obj),obj)
     }
     return map;
+}
+
+function createTableForObject<T>(obj:ObjDef):Table<T>{
+    var columns:Column<any>[] = []
+    for(var attribute of obj.attributes){
+        columns.push(new Column(attribute.name, obj => {
+            var widget = createWidget(attribute)
+            widget.value.set(obj[attribute.name])
+            widget.value.onchange.listen(val => obj[attribute.name] = val)
+            return widget.element
+        }, () => {
+            var widget = createWidget(attribute)
+            return widget.element
+        }))
+    }
+    var table = new Table(columns)
+
+    return table
 }

@@ -83,7 +83,8 @@ class DetailView{
         
 
         for(let attribute of objdef.attributes){
-            var widget = createWidget(attribute,this.widgetcontainer)
+            var widget = createWidget(attribute)
+            this.widgetcontainer.appendChild(widget.element)
             widget.value.onchange.listen(val => this.data[attribute.name] = val)
             this.widgetmap.set(attribute._id,widget)
         }
@@ -92,11 +93,20 @@ class DetailView{
         for(let referencedAttribute of objdef.referencedAttributes){
             
             this.tabs.addTab(referencedAttribute.name, () => {
-                var columns:Column<any>[] = []
+                var ownerOfReferencedAttribute:ObjDef = window.objidmap.get(referencedAttribute.belongsToObject)
+                var table = createTableForObject(ownerOfReferencedAttribute)
 
-
-                var table = new Table(columns)
-                table.load([])
+                getList(ownerOfReferencedAttribute.name,{
+                    filter:{},
+                    paging:{
+                        limit:10,
+                        skip:0
+                    },
+                    sort:{},
+                }).then(data => {
+                    table.load(data)
+                })
+                
             })
             
         }

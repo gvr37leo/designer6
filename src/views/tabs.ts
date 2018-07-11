@@ -1,4 +1,3 @@
-/// <reference path="gridView.ts" />
 /// <reference path="../localUtils.ts" />
 /// <reference path="../button.ts" />
 
@@ -25,8 +24,7 @@ class Tabs{
 
     addTab(text:string, onselect:() => void){
         var button = new Button(text,'default', () => {
-            this.tabcontainer.innerHTML = ''
-            this.tabcontainer.appendChild(gridview.element)
+            onselect()
         })
         this.tabcontainer.appendChild(button.element)
     }

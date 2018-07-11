@@ -1,12 +1,13 @@
 /// <reference path="router.ts" />
 /// <reference path="definition.ts" />
 /// <reference path="navbar.ts" />
-/// <reference path="views/gridView.ts" />
 /// <reference path="views/detailView.ts" />
 /// <reference path="localUtils.ts" />
 /// <reference path="ajax.ts" />
 
-
+interface Window{
+    objidmap:Map<string,ObjDef>
+}
 
 
 class Designer{
@@ -31,6 +32,7 @@ class Designer{
     constructor(anchor:HTMLElement,appDef:AppDef){
         this.appDef = addImplicitRefs(appDef)
         var objnamemap = array2map(this.appDef.objdefinitions, obj => obj.name)
+        window.objidmap = array2map(this.appDef.objdefinitions, obj => obj._id)
         this.filter = {
             filter:'',
             sort:'',
@@ -49,22 +51,26 @@ class Designer{
         this.navbar.addAppDef(appDef)
         
         this.router = new Router()
-        this.router.listen(/^\/$/, res => {
+        this.router.listen(new RegExp('^/$'), res => {
             var obj = this.appDef.objdefinitions[0]
 
             getList(obj.name, this.filter).then(objects => {
-                new GridView(this.viewcontainer, obj).render().load(objects.data)
+                var table = createTableForObject(obj)
+                table.load(objects.data)
+                this.viewcontainer.appendChild(table.element)
             })
         })
-        this.router.listen(/\/(.+)/, res => {
+        this.router.listen(new RegExp('^/(.+)$'), res => {
             var obj = objnamemap.get(res[1])
 
             getList(obj.name, this.filter).then(objects => {
-                new GridView(this.viewcontainer, obj).render().load(objects.data)
+                var table = createTableForObject(obj)
+                table.load(objects.data)
+                this.viewcontainer.appendChild(table.element)
             })
             
         })
-        this.router.listen(/\/(.+)\/(.+)/, res => {
+        this.router.listen(new RegExp('^/(.+)/(.+)$'), res => {
             var obj = objnamemap.get(res[1])
             var id = res[2]
             get(obj.name,id).then(val => {
