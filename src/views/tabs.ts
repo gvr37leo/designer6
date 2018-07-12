@@ -24,7 +24,8 @@ class Tabs{
 
     addTab(text:string, onselect:() => HTMLElement){
         var button = new Button(text,'default', () => {
-            this.viewcontainer.replaceChild(onselect(),this.viewcontainer.children[0])
+            this.viewcontainer.innerHTML = ''
+            this.viewcontainer.appendChild(onselect())
         })
         this.tabcontainer.appendChild(button.element)
     }

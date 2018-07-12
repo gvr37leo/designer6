@@ -13,8 +13,8 @@ function addImplicitRefs(appdef: AppDef): AppDef{
     var objmap = array2map(appdef.objdefinitions, atr => atr._id)
 
     for(var obj of appdef.objdefinitions){
-        obj.passiveAttributes.push(new IdentityAttribute(null,obj.name,obj._id))
-        obj.passiveAttributes.push(new DateAttribute(null,'lastupdate',obj._id))
+        obj.passiveAttributes.push(new IdentityAttribute('1000',obj.name,obj._id))
+        obj.passiveAttributes.push(new DateAttribute('1001','lastupdate',obj._id))
     }
 
     for(var attribute of appdef.attributes){

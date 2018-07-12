@@ -11,8 +11,8 @@ function create(objname:string, data:any){
     })
 }
 
-function get<T>(objname:string, id:string):Promise<SearchResponse<T>>{
-    return getList(objname,{filter:{_id:id},sort:undefined,paging:{skip:0,limit:10}})
+function get(objname:string, id:string):Promise<any>{
+    return getList(objname,{filter:{_id:id},sort:undefined,paging:{skip:0,limit:10}}).then(val => val.data[0])
 }
 
 function getList<T>(objname:string, query:Query):Promise<SearchResponse<T>>{

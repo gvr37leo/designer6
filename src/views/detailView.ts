@@ -45,6 +45,9 @@ class DetailView{
         this.addButton(new Button('create','success', () => {
             create(this.objdef.name,this.data)
         }))
+        this.addButton(new Button('up', 'info',() => {
+            window.location.pathname = `/${this.objdef.name}`
+        }))
 
         return this
     }
@@ -63,6 +66,9 @@ class DetailView{
         }))
         this.addButton(new Button('refresh','info', () => {
             this.refresh(id)
+        }))
+        this.addButton(new Button('up', 'info',() => {
+            window.location.pathname = `/${this.objdef.name}`
         }))
 
         this.renderTables(this.objdef)
@@ -90,12 +96,14 @@ class DetailView{
 
     renderTables(objdef:ObjDef){
         for(let referencedAttribute of objdef.referencedAttributes){
-            var ownerOfReferencedAttribute:ObjDef = window.objidmap.get(referencedAttribute.belongsToObject)
+            let ownerOfReferencedAttribute:ObjDef = window.objidmap.get(referencedAttribute.belongsToObject)
             
             this.tabs.addTab(referencedAttribute.name, () => {
-                var table = createTableForObject(ownerOfReferencedAttribute)
+                let table = createTableForObject(ownerOfReferencedAttribute)
                 getList(ownerOfReferencedAttribute.name,{
-                    filter:{},
+                    filter:{
+                        _id:this.data[referencedAttribute.name]
+                    },
                     paging:{
                         limit:10,
                         skip:0
@@ -120,12 +128,10 @@ class DetailView{
 
     load(data:any){
         this.data = data
-        for(var attribute of this.objdef.attributes){
+        var attributes = getAllAttributes(this.objdef)
+        for(var attribute of attributes){
             var widget = this.widgetmap.get(attribute._id)
             widget.value.set(this.data[attribute.name])
-        }
-        for(var attribute of this.objdef.passiveAttributes){
-            this.w
         }
     }
 

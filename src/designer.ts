@@ -7,6 +7,7 @@
 
 interface Window{
     objidmap:Map<string,ObjDef>
+    attributeidmap:Map<string,Attribute>
 }
 
 
@@ -33,6 +34,7 @@ class Designer{
         this.appDef = addImplicitRefs(appDef)
         var objnamemap = array2map(this.appDef.objdefinitions, obj => obj.name)
         window.objidmap = array2map(this.appDef.objdefinitions, obj => obj._id)
+        window.attributeidmap = array2map(this.appDef.attributes, obj => obj._id)
         this.filter = {
             filter:'',
             sort:'',
@@ -74,7 +76,7 @@ class Designer{
             var obj = objnamemap.get(res[1])
             var id = res[2]
             get(obj.name,id).then(val => {
-                new DetailView(this.viewcontainer, obj).renderDetailView(id).load(val.data[0])
+                new DetailView(this.viewcontainer, obj).renderDetailView(id).load(val)
             })
             
         })

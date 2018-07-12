@@ -15,15 +15,16 @@ class ObjDef{
 
     _id:string
     name:string
+    dropdownAttributePointer:string
+
     attributes:Attribute[] = []
     passiveAttributes:Attribute[] = []
-    dropdownAttribute:string
     referencedAttributes:PointerAttribute[] = []
 
-    constructor(_id: string, name: string, dropdownAttribute: string){
+    constructor(_id: string, name: string, dropdownAttributePointer: string){
         this._id = _id
         this.name = name
-        this.dropdownAttribute = dropdownAttribute
+        this.dropdownAttributePointer = dropdownAttributePointer
     }
 }
 
