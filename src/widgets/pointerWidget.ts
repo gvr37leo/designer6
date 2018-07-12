@@ -1,9 +1,9 @@
 class PointerWidget extends Widget<string>{
     anchortag: HTMLAnchorElement;
-    clearbutton: HTMLButtonElement;
+    clearbutton: Button;
     dropdowncontainer: HTMLElement;
     attribute: PointerAttribute;
-    createbutton: HTMLButtonElement;
+    createbutton: Button;
 
     constructor(attribute:PointerAttribute){
         super()
@@ -12,28 +12,33 @@ class PointerWidget extends Widget<string>{
         var dropdownattribute = window.attributeidmap.get(reffedObject.dropdownAttributePointer)
 
         this.element = string2html(`
-        <div>
+        <div style="display:flex; align-items:center;">
             <div id='dropddowncontainer'></div>
             <a href="/" >goto</a>
-            <button id="clearbutton">clear</button>
-            <button id="createbutton">create</button>
         </div>`)
 
         this.dropdowncontainer = this.element.querySelector('#dropddowncontainer')
         this.anchortag = this.element.querySelector('a')
-        this.clearbutton = this.element.querySelector('#clearbutton')
-        this.createbutton = this.element.querySelector('#createbutton')
         var dropdownwidget = new DropdownWidget<any>((val) => {
             return val[dropdownattribute.name]
         })
         this.dropdowncontainer.appendChild(dropdownwidget.element)
 
-      
-        this.clearbutton.addEventListener('click', () => {
+        this.clearbutton = new Button('clear','btn-danger',() => {
             this.value.clear()
         })
-        this.createbutton.addEventListener('click',() => {
+        this.element.appendChild(this.clearbutton.element)
+
+        this.createbutton = new Button('create','btn-success',() => {
             
+        })
+        this.element.appendChild(this.createbutton.element)
+      
+        dropdownwidget.value.onchange.listen(val => {
+            this.value.set(val._id)
+        })
+        this.value.onchange.listen(val => {
+            this.anchortag.href = `/${reffedObject.name}/${val}`
         })
         
         getList(reffedObject.name,{

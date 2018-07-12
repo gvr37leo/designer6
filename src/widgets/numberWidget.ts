@@ -3,7 +3,7 @@ class NumberWidget extends Widget<number>{
     
     constructor(){
         super()
-        this.element = string2html('<div><input type="number" /></div>')
+        this.element = string2html('<div><input class="form-control" type="number" /></div>')
         this.inputel = this.element.querySelector('input')
 
         this.element.addEventListener('change',(e) => {

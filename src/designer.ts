@@ -4,6 +4,8 @@
 /// <reference path="views/detailView.ts" />
 /// <reference path="localUtils.ts" />
 /// <reference path="ajax.ts" />
+/// <reference path="views/gridView.ts" />
+
 
 interface Window{
     objidmap:Map<string,ObjDef>
@@ -14,7 +16,6 @@ interface Window{
 class Designer{
 
     router:Router
-    filter:Query
     navbar: Navbar;
     appDef: AppDef;
     template:string = `
@@ -35,42 +36,27 @@ class Designer{
         var objnamemap = array2map(this.appDef.objdefinitions, obj => obj.name)
         window.objidmap = array2map(this.appDef.objdefinitions, obj => obj._id)
         window.attributeidmap = array2map(this.appDef.attributes, obj => obj._id)
-        this.filter = {
-            filter:'',
-            sort:'',
-            paging:{
-                skip:0,
-                limit:10
-            }
-        }
+
 
         this.htmlElement = createAndAppend(anchor,this.template)
         this.navbarElement = this.htmlElement.querySelector('#navbar')
         this.viewcontainer = this.htmlElement.querySelector('#viewcontainer')
         this.globalmodal = this.htmlElement.querySelector('#globalmodal')
 
-        this.navbar = new Navbar(this.navbarElement)
+        this.navbar = new Navbar()
+        this.navbarElement.appendChild(this.navbar.element)
         this.navbar.addAppDef(appDef)
         
         this.router = new Router()
         this.router.listen(new RegExp('^/$'), res => {
             var obj = this.appDef.objdefinitions[0]
-
-            getList(obj.name, this.filter).then(objects => {
-                var table = createTableForObject(obj)
-                table.load(objects.data)
-                this.viewcontainer.appendChild(table.element)
-            })
+            var gridview = new GridView(obj)
+            this.viewcontainer.appendChild(gridview.element)
         })
         this.router.listen(new RegExp('^/([a-zA-Z0-9]+)$'), res => {
             var obj = objnamemap.get(res[1])
-
-            getList(obj.name, this.filter).then(objects => {
-                var table = createTableForObject(obj)
-                this.viewcontainer.appendChild(table.element)
-                table.load(objects.data)
-            })
-            
+            var gridview = new GridView(obj)
+            this.viewcontainer.appendChild(gridview.element)
         })
         this.router.listen(new RegExp('^/([a-zA-Z0-9]+)/([a-zA-Z0-9]+)$'), res => {
             var obj = objnamemap.get(res[1])

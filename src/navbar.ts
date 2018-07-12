@@ -1,14 +1,15 @@
 class Navbar{
 
-    anchor: HTMLElement;
-    template:string = `
-        <div id='navbar'></div>
-    `
     navbarElement: HTMLElement;
+    element: HTMLElement;
 
-    constructor(anchor:HTMLElement){
-        this.anchor = anchor
-        this.navbarElement = createAndAppend(anchor,this.template)
+    constructor(){
+        this.element = string2html(`
+        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+            <a class="navbar-brand" href="/">Home</a>
+            <ul id='navbar' class="navbar-nav"></ul>
+        </nav>`)
+        this.navbarElement = this.element.querySelector('#navbar')
     }
 
     addAppDef(appdef:AppDef){
@@ -18,6 +19,6 @@ class Navbar{
     }
 
     addItem(text:string, url:string){
-        createAndAppend(this.navbarElement,`<a href=${url}>${text}</a>`)
+        createAndAppend(this.navbarElement,`<li class="nav-item"><a class="nav-link" href=${url}>${text}</a></li>`)
     }
 }

@@ -9,7 +9,7 @@ class DropdownWidget<T> extends Widget<T>{
 
         this.element = string2html(`
         <div>
-            <select></select>
+            <select class="form-control"></select>
         </div>`);
         this.selectelement = this.element.querySelector('select')
 
