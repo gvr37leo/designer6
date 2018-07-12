@@ -3,6 +3,7 @@ class PointerWidget extends Widget<string>{
     clearbutton: HTMLButtonElement;
     dropdowncontainer: HTMLElement;
     attribute: PointerAttribute;
+    createbutton: HTMLButtonElement;
 
     constructor(attribute:PointerAttribute){
         super()
@@ -14,21 +15,27 @@ class PointerWidget extends Widget<string>{
         <div>
             <div id='dropddowncontainer'></div>
             <a href="/" >goto</a>
-            <button>clear</button>
+            <button id="clearbutton">clear</button>
+            <button id="createbutton">create</button>
         </div>`)
 
         this.dropdowncontainer = this.element.querySelector('#dropddowncontainer')
         this.anchortag = this.element.querySelector('a')
-        this.clearbutton = this.element.querySelector('button')
+        this.clearbutton = this.element.querySelector('#clearbutton')
+        this.createbutton = this.element.querySelector('#createbutton')
         var dropdownwidget = new DropdownWidget<any>((val) => {
             return val[dropdownattribute.name]
         })
         this.dropdowncontainer.appendChild(dropdownwidget.element)
 
+      
         this.clearbutton.addEventListener('click', () => {
             this.value.clear()
         })
-
+        this.createbutton.addEventListener('click',() => {
+            
+        })
+        
         getList(reffedObject.name,{
             filter:{},
             paging:{

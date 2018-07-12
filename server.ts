@@ -69,9 +69,12 @@ function start(){
     
             delete req.body._id
             req.body.lastupdate = new Date().getTime()
-            collection.insert(req.body, function(err, result){
+            collection.insertOne(req.body, function(err, result){
                 if(err)res.send(err)
-                else res.send({status:'success'});
+                else res.send({
+                    status:'success',
+                    insertedId:result.insertedId,
+                });
             });
         })
     
@@ -80,7 +83,7 @@ function start(){
     
             delete req.body._id
             req.body.lastupdate = new Date().getTime()
-            collection.update({_id:new mongodb.ObjectID(req.params.id)}, {$set:req.body}, function(err, result){
+            collection.updateOne({_id:new mongodb.ObjectID(req.params.id)}, {$set:req.body}, function(err, result){
                 if(err)res.send(err);
                 else res.send({status:'success'});
             })
