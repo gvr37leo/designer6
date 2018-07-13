@@ -89,7 +89,7 @@ function createTableForObject<T>(objdef:ObjDef):Table<T>{
         }))
     }
     columns.push(new Column('', obj => {
-        var buttoncontainer = string2html('<div style="display:flex;" ></div>')
+        var buttoncontainer = string2html('<div class="ui buttons"></div>')
         var savebutton = createSaveButton(objdef, obj._id, obj)
         var deletebutton = createDeleteButton(objdef, obj._id)
         buttoncontainer.appendChild(savebutton.element)
@@ -108,14 +108,14 @@ function getAllAttributes(obj:ObjDef):Attribute[]{
 }
 
 function createSaveButton(objdef:ObjDef,id:string,data:any):Button{
-    return new Button('save','btn-success',() => {
+    return new Button('save','green',() => {
         update(objdef.name,id,data)
         toastr.success('saved')
     })
 }
 
 function createDeleteButton(objdef:ObjDef,id:string):Button{
-    return new Button('delete','btn-danger',() => {
+    return new Button('delete','red',() => {
         del(objdef.name, id)
         toastr.error('deleted')
     })

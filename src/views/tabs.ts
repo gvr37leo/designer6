@@ -14,8 +14,8 @@ class Tabs{
         this.anchor = anchor
         this.element = createAndAppend(anchor,`
             <div>
-                <div id="tabcontainer"></div>
-                <div id="viewcontainer"></div>
+                <div class="ui top attached tabular menu" id="tabcontainer"></div>
+                <div class="ui bottom attached segment" id="viewcontainer"></div>
             </div>
         `)
 
@@ -26,7 +26,7 @@ class Tabs{
 
     addTab(text:string, renderer:() => HTMLElement){
         this.tabmap.set(text,renderer)
-        var button = new Button(text,'default', () => {
+        var button = new Button(text,'item active', () => {
             this.render(renderer())
         })
         this.tabcontainer.appendChild(button.element)

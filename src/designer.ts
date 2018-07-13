@@ -23,7 +23,7 @@ class Designer{
     template:string = `
         <div>
             <div id='navbar'></div>
-            <div id='viewcontainer'></div>
+            <div id='viewcontainer' style="padding:10px;"></div>
         </div>
     `
     htmlElement: HTMLElement;

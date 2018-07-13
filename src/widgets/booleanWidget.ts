@@ -7,7 +7,11 @@ class BooleanWidget extends Widget<boolean>{
     constructor(){
         super()
 
-        this.element = string2html('<div><input class="form-control" type="checkbox" /></div>')
+        this.element = string2html(`
+        <div class="ui slider checkbox">
+            <input  type="checkbox" />
+            <label></label>
+        </div>`)
         this.inputel = this.element.querySelector('input')
 
         this.element.addEventListener('change',(e) => {

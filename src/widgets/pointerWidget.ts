@@ -13,9 +13,9 @@ class PointerWidget extends Widget<string>{
         var dropdownattribute = window.attributeidmap.get(reffedObject.dropdownAttributePointer)
 
         this.element = string2html(`
-        <div style="display:flex; align-items:center;">
+        <div class="ui action input">
             <div id='dropddowncontainer'></div>
-            <a href="/" >goto</a>
+            <a class="ui button blue compact" href="/" >goto</a>
         </div>`)
 
         this.dropdowncontainer = this.element.querySelector('#dropddowncontainer')
@@ -25,12 +25,12 @@ class PointerWidget extends Widget<string>{
         })
         this.dropdowncontainer.appendChild(this.dropdownwidget.element)
 
-        this.clearbutton = new Button('clear','btn-danger',() => {
+        this.clearbutton = new Button('clear','red compact',() => {
             this.value.clear()
         })
         this.element.appendChild(this.clearbutton.element)
 
-        this.createbutton = new Button('create','btn-success',() => {
+        this.createbutton = new Button('create','green compact',() => {
             
         })
         this.element.appendChild(this.createbutton.element)

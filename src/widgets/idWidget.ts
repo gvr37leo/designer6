@@ -5,9 +5,9 @@ class IDWidget extends Widget<string>{
     constructor(attribute:IdentityAttribute){
         super()
         this.element = string2html(`
-        <div style="display:flex; align-items:center;">
-            <input class="form-control" id="input" type="text" readonly/>
-            <a href="/" id="anchortag">goto</a>
+        <div class="ui action input">
+            <input class="" id="input" type="text" readonly/>
+            <a class="ui button blue" href="/" id="anchortag">goto</a>
         </div>`)
         this.inputelement = this.element.querySelector('#input') as HTMLInputElement
         this.anchortag = this.element.querySelector('#anchortag') as HTMLAnchorElement

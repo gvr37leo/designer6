@@ -8,7 +8,7 @@ class TextWidget extends Widget<string>{
 
     constructor(){
         super()
-        this.element = string2html('<div><input class="form-control"/></div>')
+        this.element = string2html('<div class="ui input"><input /></div>')
         this.inputel = this.element.querySelector('input')
 
         this.element.addEventListener('change',(e) => {

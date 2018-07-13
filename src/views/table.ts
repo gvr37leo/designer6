@@ -18,7 +18,7 @@ class Table<T>{
     constructor(columns:Column<T>[]){
         this.columns = columns
         this.element = string2html(`
-            <table class="table table-striped table-bordered">
+            <table class="ui celled  table">
                 <thead>
                     <tr id="titlerow"></tr>
                     <tr id="filterrow"></tr>
@@ -34,10 +34,10 @@ class Table<T>{
 
     addHeader(){
         for(var column of this.columns){
-            var cell = this.createTableCell(this.titlerow)
+            var cell = this.createTableHeadCell(this.titlerow)
             cell.innerText = column.name
 
-            var cell2 = this.createTableCell(this.filterrow)
+            var cell2 = this.createTableHeadCell(this.filterrow)
             cell2.appendChild(column.filterRenderer())
         }
     }
@@ -55,8 +55,8 @@ class Table<T>{
         }
     }
 
-    private createTableCell(row){
-        var td = document.createElement('td')
+    private createTableHeadCell(row){
+        var td = document.createElement('th')
         row.appendChild(td)
         return td
     }

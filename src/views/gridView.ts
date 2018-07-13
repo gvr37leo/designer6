@@ -22,19 +22,13 @@ class GridView{
             }
         }
         this.element = string2html(`
-        <div class="container-fluid">
-            <div class="row mt-3">
-                <div class="col">
-                    <div id="buttoncontainer"></div>
-                </div>
-            </div>
-            <div class="row mt-3">
-                <div class="col" id="tablecontainer"></div>
-            </div>
+        <div class="">
+            <div class="" id="buttoncontainer"></div>
+            <div class="" style="margin-top:10px;" id="tablecontainer"></div>
         </div>`)
         this.buttoncontainer = this.element.querySelector('#buttoncontainer')
         this.tablecontainer = this.element.querySelector('#tablecontainer')
-        this.addButton(new Button('create','btn-success',() => {
+        this.addButton(new Button('create','green',() => {
             var detailview = new DetailView(obj)
             detailview.renderCreateView()
             window.globalModal.set(detailview.element)
@@ -44,7 +38,7 @@ class GridView{
                 this.sync()
             })
         }))
-        this.addButton(new Button('refresh','btn-info', () => {
+        this.addButton(new Button('refresh','blue', () => {
             this.sync()
         }))
         this.table = createTableForObject(this.objdef)

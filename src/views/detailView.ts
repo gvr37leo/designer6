@@ -7,14 +7,21 @@ class DetailView{
 
     objdef:ObjDef
     template:string = `
-    <div id="detailview">
-        <div id="buttoncontainer">
+    <div id="detailview" class="ui padded grid">
+        <div class="row">
+            <div id="buttoncontainer" class="ui buttons">
+            </div>
+        </div>
+        
+
+        <div class="row">
+            <div id="widgetcontainer" class="ui form">
+            </div>
         </div>
 
-        <div id="widgetcontainer">
-        </div>
-
-        <div id="tabscontainer">
+        <div class="row">
+            <div id="tabscontainer" class="">
+            </div>
         </div>
     </div>
     `
@@ -42,12 +49,12 @@ class DetailView{
 
         this.renderWidgets(this.objdef.attributes)
 
-        this.addButton(new Button('create','success', () => {
+        this.addButton(new Button('create','green', () => {
             create(this.objdef.name,this.data).then(val => {
                 this.onObjectCreated.trigger(val.insertedId)
             })
         }))
-        this.addButton(new Button('up', 'info',() => {
+        this.addButton(new Button('up', 'teal',() => {
             window.location.pathname = `/${this.objdef.name}`
         }))
 
@@ -64,10 +71,10 @@ class DetailView{
         this.addButton(createSaveButton(this.objdef,id,this.data))
         this.addButton(createDeleteButton(this.objdef,id))
         
-        this.addButton(new Button('refresh','info', () => {
+        this.addButton(new Button('refresh','blue', () => {
             this.refresh(id)
         }))
-        this.addButton(new Button('up', 'info',() => {
+        this.addButton(new Button('up', 'teal',() => {
             window.location.pathname = `/${this.objdef.name}`
         }))
 
@@ -100,7 +107,7 @@ class DetailView{
     renderWidgets(attributes:Attribute[]){
         for(let attribute of attributes){
             var widget = createWidget(attribute)
-            var field = createAndAppend(this.widgetcontainer,`<div><b>${attribute.name}</b><span id="valuecontainer"></span></div>`)
+            var field = createAndAppend(this.widgetcontainer,`<div class="field"><label>${attribute.name}</label><div id="valuecontainer"></div></div>`)
             var valuecontainer = field.querySelector('#valuecontainer')
             valuecontainer.appendChild(widget.element)
             widget.value.onchange.listen(val => this.data[attribute.name] = val)
