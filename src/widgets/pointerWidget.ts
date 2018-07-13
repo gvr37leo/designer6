@@ -4,6 +4,7 @@ class PointerWidget extends Widget<string>{
     dropdowncontainer: HTMLElement;
     attribute: PointerAttribute;
     createbutton: Button;
+    dropdownwidget: DropdownWidget<any>;
 
     constructor(attribute:PointerAttribute){
         super()
@@ -19,10 +20,10 @@ class PointerWidget extends Widget<string>{
 
         this.dropdowncontainer = this.element.querySelector('#dropddowncontainer')
         this.anchortag = this.element.querySelector('a')
-        var dropdownwidget = new DropdownWidget<any>((val) => {
+        this.dropdownwidget = new DropdownWidget<any>((val) => {
             return val[dropdownattribute.name]
         })
-        this.dropdowncontainer.appendChild(dropdownwidget.element)
+        this.dropdowncontainer.appendChild(this.dropdownwidget.element)
 
         this.clearbutton = new Button('clear','btn-danger',() => {
             this.value.clear()
@@ -34,11 +35,15 @@ class PointerWidget extends Widget<string>{
         })
         this.element.appendChild(this.createbutton.element)
       
-        dropdownwidget.value.onchange.listen(val => {
+        this.dropdownwidget.value.onchange.listen(val => {
             this.value.set(val._id)
         })
         this.value.onchange.listen(val => {
             this.anchortag.href = `/${reffedObject.name}/${val}`
+            get(reffedObject.name,this.value.get()).then(val => {
+                this.dropdownwidget.value.set(val)
+            })
+            
         })
         
         getList(reffedObject.name,{
@@ -49,7 +54,7 @@ class PointerWidget extends Widget<string>{
             },
             sort:{},
         }).then(data => {
-            dropdownwidget.loadOptions(data.data)
+            this.dropdownwidget.loadOptions(data.data)
         })
         
 

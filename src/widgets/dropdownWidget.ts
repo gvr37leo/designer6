@@ -13,6 +13,10 @@ class DropdownWidget<T> extends Widget<T>{
         </div>`);
         this.selectelement = this.element.querySelector('select')
 
+        this.value.onchange.listen(val => {
+            // this.selectelement = displayer(val)
+        })
+
         this.selectelement.addEventListener('change',(e) => {
             this.value.set(this.options[this.selectelement.selectedIndex])
         })

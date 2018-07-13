@@ -110,11 +110,13 @@ function getAllAttributes(obj:ObjDef):Attribute[]{
 function createSaveButton(objdef:ObjDef,id:string,data:any):Button{
     return new Button('save','btn-success',() => {
         update(objdef.name,id,data)
+        toastr.success('saved')
     })
 }
 
 function createDeleteButton(objdef:ObjDef,id:string):Button{
     return new Button('delete','btn-danger',() => {
         del(objdef.name, id)
+        toastr.error('deleted')
     })
 }
