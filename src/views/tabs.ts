@@ -7,6 +7,7 @@ class Tabs{
     element: HTMLElement;
     tabcontainer: HTMLElement;
     viewcontainer: HTMLElement;
+    tabmap: Map<string, () => HTMLElement>;
 
 
     constructor(anchor:HTMLElement){
@@ -20,13 +21,25 @@ class Tabs{
 
         this.tabcontainer = this.element.querySelector('#tabcontainer')
         this.viewcontainer = this.element.querySelector('#viewcontainer')
+        this.tabmap = new Map<string, () => HTMLElement>()
     }
 
-    addTab(text:string, onselect:() => HTMLElement){
+    addTab(text:string, renderer:() => HTMLElement){
+        this.tabmap.set(text,renderer)
         var button = new Button(text,'default', () => {
-            this.viewcontainer.innerHTML = ''
-            this.viewcontainer.appendChild(onselect())
+            this.render(renderer())
         })
         this.tabcontainer.appendChild(button.element)
+    }
+
+    selectTab(text:string){
+        if(this.tabmap.has(text)){
+            this.render(this.tabmap.get(text)())
+        }
+    }
+
+    render(element:HTMLElement){
+        this.viewcontainer.innerHTML = ''
+        this.viewcontainer.appendChild(element)
     }
 }

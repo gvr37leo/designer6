@@ -89,7 +89,7 @@ function createTableForObject<T>(objdef:ObjDef):Table<T>{
         }))
     }
     columns.push(new Column('', obj => {
-        var buttoncontainer = string2html('<div></div>')
+        var buttoncontainer = string2html('<div style="display:flex;" ></div>')
         var savebutton = createSaveButton(objdef, obj._id, obj)
         var deletebutton = createDeleteButton(objdef, obj._id)
         buttoncontainer.appendChild(savebutton.element)

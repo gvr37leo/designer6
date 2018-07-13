@@ -71,7 +71,16 @@ class DetailView{
             window.location.pathname = `/${this.objdef.name}`
         }))
 
-        this.renderTables(this.objdef)
+        this.addTablesToTabs(this.objdef,id)
+        if(this.objdef.referencedAttributes.length > 0){
+            this.tabs.selectTab(this.objdef.referencedAttributes[0].name)
+        }
+
+        get(this.objdef.name,id).then(val => {
+            this.load(val)
+        })
+
+        
 
         return this
     }
@@ -94,15 +103,15 @@ class DetailView{
         }
     }
 
-    renderTables(objdef:ObjDef){
+    addTablesToTabs(objdef:ObjDef,id:string){
         for(let referencedAttribute of objdef.referencedAttributes){
             let ownerOfReferencedAttribute:ObjDef = window.objidmap.get(referencedAttribute.belongsToObject)
             
             this.tabs.addTab(referencedAttribute.name, () => {
                 let table = createTableForObject(ownerOfReferencedAttribute)
-                getList(ownerOfReferencedAttribute.name,{
+                getList(ownerOfReferencedAttribute.name, {
                     filter:{
-                        _id:this.data[referencedAttribute.name]
+                        _id:id
                     },
                     paging:{
                         limit:10,

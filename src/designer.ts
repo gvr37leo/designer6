@@ -60,12 +60,9 @@ class Designer{
         this.router.listen(new RegExp('^/([a-zA-Z0-9]+)/([a-zA-Z0-9]+)$'), res => {
             var obj = objnamemap.get(res[1])
             var id = res[2]
-            get(obj.name,id).then(val => {
-                var detailview = new DetailView(obj);
-                detailview.renderDetailView(id).load(val)
-                this.viewcontainer.appendChild(detailview.element)
-            })
-            
+            var detailview = new DetailView(obj);
+            detailview.renderDetailView(id)
+            this.viewcontainer.appendChild(detailview.element)
         })
 
         this.router.trigger(window.location.pathname)
