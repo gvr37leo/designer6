@@ -9,6 +9,7 @@ class GridView{
 
     buttoncontainer: HTMLElement;
     tablecontainer: HTMLElement;
+    table: Table<any>;
 
     constructor(obj:ObjDef){
         this.objdef = obj
@@ -34,14 +35,28 @@ class GridView{
         this.buttoncontainer = this.element.querySelector('#buttoncontainer')
         this.tablecontainer = this.element.querySelector('#tablecontainer')
         this.addButton(new Button('create','btn-success',() => {
-
+            var detailview = new DetailView(obj)
+            detailview.renderCreateView()
+            window.globalModal.set(detailview.element)
+            window.globalModal.show()
+            detailview.onObjectCreated.listen(createdId => {
+                window.globalModal.hide()
+                this.sync()
+            })
         }))
+        this.addButton(new Button('refresh','btn-info', () => {
+            this.sync()
+        }))
+        this.table = createTableForObject(this.objdef)
 
+        this.sync()
+    }
+
+    sync(){
         getList(this.objdef.name, this.filter).then(objects => {
-            var table = createTableForObject(this.objdef)
-            table.load(objects.data)
-            this.tablecontainer.appendChild(table.element)
-        }) 
+            this.table.load(objects.data)
+            this.tablecontainer.appendChild(this.table.element)
+        })
     }
 
     addButton(button:Button){

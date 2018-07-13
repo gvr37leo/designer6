@@ -1,7 +1,7 @@
 /// <reference path="definition.ts" />
 
 
-function create(objname:string, data:any){
+function create(objname:string, data:any):Promise<PostResponse>{
     return httpCall(`/api/${objname}`,{
         headers:{
             'Content-Type': 'application/json'
@@ -62,4 +62,9 @@ declare class Query{
 declare class SearchResponse<T>{
     data:T[]
     collectionSize:number
+}
+
+declare class PostResponse{
+    status:string
+    insertedId:string
 }

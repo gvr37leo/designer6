@@ -18,10 +18,10 @@ class DetailView{
         </div>
     </div>
     `
-    anchor: HTMLElement;
     data:any = {}
     widgetmap: Map<string, Widget<any>>;
     tabs: Tabs;
+    onObjectCreated:EventSystem<string>
 
     element: HTMLElement;
     buttoncontainer: HTMLElement;
@@ -31,19 +31,21 @@ class DetailView{
 
 
 
-    constructor(anchor:HTMLElement, objdef:ObjDef){
-        this.anchor = anchor;
+    constructor(objdef:ObjDef){
         this.objdef = objdef
         this.widgetmap = new Map<string,Widget<any>>()
     }
 
     renderCreateView():DetailView{
+        this.onObjectCreated = new EventSystem()
         this.renderTemplate()
 
         this.renderWidgets(this.objdef.attributes)
 
         this.addButton(new Button('create','success', () => {
-            create(this.objdef.name,this.data)
+            create(this.objdef.name,this.data).then(val => {
+                this.onObjectCreated.trigger(val.insertedId)
+            })
         }))
         this.addButton(new Button('up', 'info',() => {
             window.location.pathname = `/${this.objdef.name}`
@@ -58,12 +60,10 @@ class DetailView{
 
         this.renderWidgets(this.objdef.passiveAttributes.concat(this.objdef.attributes))
 
-        this.addButton(new Button('save','success', () => {
-            update(this.objdef.name,id,this.data)
-        }))
-        this.addButton(new Button('delete','warning', () => {
-            del(this.objdef.name, id)
-        }))
+        
+        this.addButton(createSaveButton(this.objdef,id,this.data))
+        this.addButton(createDeleteButton(this.objdef,id))
+        
         this.addButton(new Button('refresh','info', () => {
             this.refresh(id)
         }))
@@ -77,10 +77,10 @@ class DetailView{
     }
 
     renderTemplate(){
-        this.element = createAndAppend(this.anchor,this.template)
-        this.buttoncontainer = document.querySelector('#buttoncontainer')
-        this.widgetcontainer = document.querySelector('#widgetcontainer')
-        this.tabscontainer = document.querySelector('#tabscontainer')
+        this.element = string2html(this.template)
+        this.buttoncontainer = this.element.querySelector('#buttoncontainer')
+        this.widgetcontainer = this.element.querySelector('#widgetcontainer')
+        this.tabscontainer = this.element.querySelector('#tabscontainer')
     }
 
     renderWidgets(attributes:Attribute[]){

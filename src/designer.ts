@@ -5,11 +5,13 @@
 /// <reference path="localUtils.ts" />
 /// <reference path="ajax.ts" />
 /// <reference path="views/gridView.ts" />
+/// <reference path="modal.ts" />
 
 
 interface Window{
     objidmap:Map<string,ObjDef>
     attributeidmap:Map<string,Attribute>
+    globalModal:Modal
 }
 
 
@@ -22,13 +24,11 @@ class Designer{
         <div>
             <div id='navbar'></div>
             <div id='viewcontainer'></div>
-            <div id='globalmodal'></div>
         </div>
     `
     htmlElement: HTMLElement;
     navbarElement: HTMLElement;
     viewcontainer: HTMLElement;
-    globalmodal: HTMLElement;
 
 
     constructor(anchor:HTMLElement,appDef:AppDef){
@@ -36,12 +36,11 @@ class Designer{
         var objnamemap = array2map(this.appDef.objdefinitions, obj => obj.name)
         window.objidmap = array2map(this.appDef.objdefinitions, obj => obj._id)
         window.attributeidmap = array2map(this.appDef.attributes, obj => obj._id)
-
+        window.globalModal = new Modal()
 
         this.htmlElement = createAndAppend(anchor,this.template)
         this.navbarElement = this.htmlElement.querySelector('#navbar')
         this.viewcontainer = this.htmlElement.querySelector('#viewcontainer')
-        this.globalmodal = this.htmlElement.querySelector('#globalmodal')
 
         this.navbar = new Navbar()
         this.navbarElement.appendChild(this.navbar.element)
@@ -62,7 +61,9 @@ class Designer{
             var obj = objnamemap.get(res[1])
             var id = res[2]
             get(obj.name,id).then(val => {
-                new DetailView(this.viewcontainer, obj).renderDetailView(id).load(val)
+                var detailview = new DetailView(obj);
+                detailview.renderDetailView(id).load(val)
+                this.viewcontainer.appendChild(detailview.element)
             })
             
         })

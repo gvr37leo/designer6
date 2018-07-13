@@ -43,7 +43,7 @@ class Table<T>{
     }
 
     load(objects:T[]){
-
+        this.body.innerHTML = ''
         for(var object of objects){
             var row = document.createElement('tr')
             this.body.appendChild(row)            

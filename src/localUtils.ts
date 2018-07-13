@@ -74,9 +74,9 @@ function array2map<T,F>(array:T[], fieldSelector:(obj:T) => F):Map<F,T>{
     return map;
 }
 
-function createTableForObject<T>(obj:ObjDef):Table<T>{
+function createTableForObject<T>(objdef:ObjDef):Table<T>{
     var columns:Column<any>[] = []
-    var attributes = obj.passiveAttributes.concat(obj.attributes)
+    var attributes = objdef.passiveAttributes.concat(objdef.attributes)
     for(let attribute of attributes){
         columns.push(new Column(attribute.name, obj => {
             var widget = createWidget(attribute)
@@ -88,6 +88,16 @@ function createTableForObject<T>(obj:ObjDef):Table<T>{
             return widget.element
         }))
     }
+    columns.push(new Column('', obj => {
+        var buttoncontainer = string2html('<div></div>')
+        var savebutton = createSaveButton(objdef, obj._id, obj)
+        var deletebutton = createDeleteButton(objdef, obj._id)
+        buttoncontainer.appendChild(savebutton.element)
+        buttoncontainer.appendChild(deletebutton.element)
+        return buttoncontainer
+    },() => {
+        return string2html('<div></div>')
+    }))
     var table = new Table(columns)
 
     return table
@@ -95,4 +105,16 @@ function createTableForObject<T>(obj:ObjDef):Table<T>{
 
 function getAllAttributes(obj:ObjDef):Attribute[]{
     return obj.passiveAttributes.concat(obj.attributes)
+}
+
+function createSaveButton(objdef:ObjDef,id:string,data:any):Button{
+    return new Button('save','btn-success',() => {
+        update(objdef.name,id,data)
+    })
+}
+
+function createDeleteButton(objdef:ObjDef,id:string):Button{
+    return new Button('delete','btn-danger',() => {
+        del(objdef.name, id)
+    })
 }
