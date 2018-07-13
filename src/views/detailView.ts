@@ -77,7 +77,12 @@ class DetailView{
         }
 
         get(this.objdef.name,id).then(val => {
-            this.load(val)
+            if(val == null){
+                //nullptr
+            }else{
+                this.load(val)
+            }
+            
         })
 
         
