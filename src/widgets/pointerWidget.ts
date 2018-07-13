@@ -41,7 +41,11 @@ class PointerWidget extends Widget<string>{
         this.value.onchange.listen(val => {
             this.anchortag.href = `/${reffedObject.name}/${val}`
             get(reffedObject.name,this.value.get()).then(val => {
-                this.dropdownwidget.value.set(val)
+                if(val == null){
+                    //set display to nullptr
+                }else{
+                    this.dropdownwidget.value.set(val)
+                }
             })
             
         })
