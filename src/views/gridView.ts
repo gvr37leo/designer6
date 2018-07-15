@@ -23,7 +23,7 @@ class GridView{
         }
         this.element = string2html(`
         <div class="">
-            <div class="" id="buttoncontainer"></div>
+            <div class="ui buttons" id="buttoncontainer"></div>
             <div class="" style="margin-top:10px;" id="tablecontainer"></div>
         </div>`)
         this.buttoncontainer = this.element.querySelector('#buttoncontainer')
@@ -42,6 +42,7 @@ class GridView{
             this.sync()
         }))
         this.table = createTableForObject(this.objdef)
+
 
         this.sync()
     }

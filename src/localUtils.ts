@@ -75,6 +75,7 @@ function array2map<T,F>(array:T[], fieldSelector:(obj:T) => F):Map<F,T>{
 }
 
 function createTableForObject<T>(objdef:ObjDef):Table<T>{
+    var table
     var columns:Column<any>[] = []
     var attributes = objdef.passiveAttributes.concat(objdef.attributes)
     for(let attribute of attributes){
@@ -91,15 +92,31 @@ function createTableForObject<T>(objdef:ObjDef):Table<T>{
     columns.push(new Column('', obj => {
         var buttoncontainer = string2html('<div class="ui buttons"></div>')
         var savebutton = createSaveButton(objdef, obj._id, obj)
-        var deletebutton = createDeleteButton(objdef, obj._id)
+        
+        var deletebutton = new Button('delete','red',() => {
+            del(objdef.name, obj._id).then(() => {
+                getList(objdef.name,{
+                    filter:{},
+                    sort:{},
+                    paging:{
+                        skip:0,
+                        limit:10
+                    }
+                }).then(data => {
+                    table.load(data)
+                })
+            })
+            toastr.error('deleted')
+        })
         buttoncontainer.appendChild(savebutton.element)
         buttoncontainer.appendChild(deletebutton.element)
         return buttoncontainer
     },() => {
         return string2html('<div></div>')
     }))
-    var table = new Table(columns)
+    table = new Table(columns)
 
+    
     return table
 }
 

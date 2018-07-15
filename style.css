@@ -1,0 +1,30 @@
+
+.dropdownel {
+    position: relative;
+    display: inline-block;
+}
+
+.dropper{
+    top: 40px;
+    min-width: 150px;
+    margin-top: 5px; 
+    overflow: auto;
+    border-radius: 3px; 
+    padding: 5px; 
+    left: 0px;
+    position: absolute;
+    display: none;
+    background-color: white;
+    border:1px #a9a9a9 solid;
+    z-index: 1;
+}
+
+.drop{
+    padding: 3px;
+    border-radius: 3px;
+    padding-left: 6px;
+}
+
+.drop:hover{
+    background-color: #2185d0
+}

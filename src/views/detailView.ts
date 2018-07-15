@@ -15,7 +15,7 @@ class DetailView{
         
 
         <div class="row">
-            <div id="widgetcontainer" class="ui form">
+            <div id="widgetcontainer" style="border: 1px solid #dededf; padding: 10px; border-radius: 5px;" class="ui form">
             </div>
         </div>
 
@@ -68,9 +68,14 @@ class DetailView{
         this.renderWidgets(this.objdef.passiveAttributes.concat(this.objdef.attributes))
 
         
-        this.addButton(createSaveButton(this.objdef,id,this.data))
-        this.addButton(createDeleteButton(this.objdef,id))
-        
+        this.addButton(new Button('save','green',() => {
+            update(this.objdef.name,id,this.data)
+            toastr.success('saved')
+        }))
+        this.addButton(new Button('delete','red',() => {
+            del(this.objdef.name, id)
+            toastr.error('deleted')
+        }))
         this.addButton(new Button('refresh','blue', () => {
             this.refresh(id)
         }))
@@ -121,10 +126,10 @@ class DetailView{
             
             this.tabs.addTab(referencedAttribute.name, () => {
                 let table = createTableForObject(ownerOfReferencedAttribute)
+                var filter = {}
+                filter[referencedAttribute.name] = id
                 getList(ownerOfReferencedAttribute.name, {
-                    filter:{
-                        _id:id
-                    },
+                    filter:filter,
                     paging:{
                         limit:10,
                         skip:0

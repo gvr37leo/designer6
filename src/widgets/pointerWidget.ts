@@ -14,13 +14,13 @@ class PointerWidget extends Widget<string>{
 
         this.element = string2html(`
         <div class="ui action input">
-            <div id='dropddowncontainer'></div>
+            <div class="" id='dropddowncontainer'></div>
             <a class="ui button blue compact" href="/" >goto</a>
         </div>`)
 
         this.dropdowncontainer = this.element.querySelector('#dropddowncontainer')
         this.anchortag = this.element.querySelector('a')
-        this.dropdownwidget = new DropdownWidget<any>((val) => {
+        this.dropdownwidget = new DropdownWidget<any>('',(val) => {
             return val[dropdownattribute.name]
         })
         this.dropdowncontainer.appendChild(this.dropdownwidget.element)
@@ -39,14 +39,19 @@ class PointerWidget extends Widget<string>{
             this.value.set(val._id)
         })
         this.value.onchange.listen(val => {
-            this.anchortag.href = `/${reffedObject.name}/${val}`
-            get(reffedObject.name,this.value.get()).then(val => {
-                if(val == null){
-                    //set display to nullptr
-                }else{
-                    this.dropdownwidget.value.set(val)
-                }
-            })
+            if(val == null){
+                this.dropdownwidget.input.value = 'null'
+                this.anchortag.href = ''
+            }else{
+                this.anchortag.href = `/${reffedObject.name}/${val}`
+                get(reffedObject.name,this.value.get()).then(data => {
+                    if(data == null){
+                        this.dropdownwidget.input.value = 'nullptr'
+                    }else{
+                        this.dropdownwidget.value.set(data)
+                    }
+                })
+            }
             
         })
         
