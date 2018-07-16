@@ -110,7 +110,7 @@ function createTableForObject<T>(objdef:ObjDef):Table<T>{
                         limit:10
                     }
                 }).then(data => {
-                    table.load(data)
+                    table.load(data.data)
                 })
             })
             toastr.error('deleted')
