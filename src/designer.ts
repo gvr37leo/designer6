@@ -50,11 +50,13 @@ class Designer{
         this.router.listen(new RegExp('^/$'), res => {
             var obj = this.appDef.objdefinitions[0]
             var gridview = new GridView(obj)
+            this.viewcontainer.innerHTML = ''
             this.viewcontainer.appendChild(gridview.element)
         })
         this.router.listen(new RegExp('^/([a-zA-Z0-9]+)$'), res => {
             var obj = objnamemap.get(res[1])
             var gridview = new GridView(obj)
+            this.viewcontainer.innerHTML = ''
             this.viewcontainer.appendChild(gridview.element)
         })
         this.router.listen(new RegExp('^/([a-zA-Z0-9]+)/([a-zA-Z0-9]+)$'), res => {
@@ -62,14 +64,14 @@ class Designer{
             var id = res[2]
             var detailview = new DetailView(obj);
             detailview.renderDetailView(id)
+            this.viewcontainer.innerHTML = ''
             this.viewcontainer.appendChild(detailview.element)
         })
 
         this.router.trigger(window.location.pathname)
-        // new DetailView(this.viewcontainer, appdef.objdefinitions[0]).renderCreateView()
 
-        // window.addEventListener('', e => {
-        //     this.router.trigger('')
-        // })
+        window.addEventListener('popstate',(event) => {
+            this.router.trigger(window.location.pathname)
+        })
     }
 }

@@ -24,17 +24,17 @@ class Tabs{
         this.tabmap = new Map<string, () => HTMLElement>()
     }
 
-    addTab(text:string, renderer:() => HTMLElement){
-        this.tabmap.set(text,renderer)
+    addTab(id:string,text:string, renderer:() => HTMLElement){
+        this.tabmap.set(id,renderer)
         var button = new Button(text,'item active', () => {
             this.render(renderer())
         })
         this.tabcontainer.appendChild(button.element)
     }
 
-    selectTab(text:string){
-        if(this.tabmap.has(text)){
-            this.render(this.tabmap.get(text)())
+    selectTab(id:string){
+        if(this.tabmap.has(id)){
+            this.render(this.tabmap.get(id)())
         }
     }
 

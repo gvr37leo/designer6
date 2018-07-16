@@ -31,7 +31,13 @@ class PointerWidget extends Widget<string>{
         this.element.appendChild(this.clearbutton.element)
 
         this.createbutton = new Button('create','green compact',() => {
-            
+            var createview = new DetailView(reffedObject).renderCreateView()
+            window.globalModal.set(createview.element)
+            window.globalModal.show()
+            createview.onObjectCreated.listen((insertedId) => {
+                this.value.set(insertedId)
+                window.globalModal.hide()
+            })
         })
         this.element.appendChild(this.createbutton.element)
       

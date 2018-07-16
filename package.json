@@ -9,7 +9,7 @@
     "@types/mongodb": "^3.1.1",
     "@types/toastr": "^2.1.35",
     "body-parser": "^1.18.3",
-    "eventsystemx": "^0.3.0",
+    "eventsystemx": "^0.4.0",
     "express": "^4.16.3",
     "mongodb": "^3.1.1",
     "utilsx": "^1.7.0",

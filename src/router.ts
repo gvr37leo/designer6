@@ -18,6 +18,11 @@ class Router{
             }
         }
     }
+
+    pushTrigger(url:string){
+        window.history.pushState(null,null,url)
+        this.trigger(url)
+    }
 }
 
 class RouteRegistration{

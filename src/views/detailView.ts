@@ -34,6 +34,7 @@ class DetailView{
     buttoncontainer: HTMLElement;
     widgetcontainer: HTMLElement;
     tabscontainer: HTMLElement;
+    dirtiedEvent: EventSystem<number>;
         
 
 
@@ -64,28 +65,30 @@ class DetailView{
     renderDetailView(id:string):DetailView{
         this.renderTemplate()
         this.tabs = new Tabs(this.tabscontainer)
-
+        this.dirtiedEvent = new EventSystem<number>()
         this.renderWidgets(this.objdef.passiveAttributes.concat(this.objdef.attributes))
 
         
-        this.addButton(new Button('save','green',() => {
+        this.addButton(new DisableableButton('save','green',this.dirtiedEvent,() => {
             update(this.objdef.name,id,this.data)
             toastr.success('saved')
         }))
         this.addButton(new Button('delete','red',() => {
-            del(this.objdef.name, id)
+            del(this.objdef.name, id).then(() => {
+                designer.router.pushTrigger(`/${this.objdef.name}`)
+            })
             toastr.error('deleted')
         }))
         this.addButton(new Button('refresh','blue', () => {
             this.refresh(id)
         }))
         this.addButton(new Button('up', 'teal',() => {
-            window.location.pathname = `/${this.objdef.name}`
+            designer.router.pushTrigger(`/${this.objdef.name}`)
         }))
 
         this.addTablesToTabs(this.objdef,id)
         if(this.objdef.referencedAttributes.length > 0){
-            this.tabs.selectTab(this.objdef.referencedAttributes[0].name)
+            this.tabs.selectTab(this.objdef.referencedAttributes[0]._id)
         }
 
         get(this.objdef.name,id).then(val => {
@@ -93,6 +96,11 @@ class DetailView{
                 //nullptr
             }else{
                 this.load(val)
+                for(var widget of this.widgetmap.values()){
+                    widget.value.onchange.listen(() => {
+                        this.dirtiedEvent.trigger(0)
+                    })
+                }
             }
             
         })
@@ -124,7 +132,7 @@ class DetailView{
         for(let referencedAttribute of objdef.referencedAttributes){
             let ownerOfReferencedAttribute:ObjDef = window.objidmap.get(referencedAttribute.belongsToObject)
             
-            this.tabs.addTab(referencedAttribute.name, () => {
+            this.tabs.addTab(referencedAttribute._id,`${ownerOfReferencedAttribute.name} : ${referencedAttribute.name}`, () => {
                 let table = createTableForObject(ownerOfReferencedAttribute)
                 var filter = {}
                 filter[referencedAttribute.name] = id

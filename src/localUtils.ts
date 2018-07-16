@@ -78,11 +78,15 @@ function createTableForObject<T>(objdef:ObjDef):Table<T>{
     var table
     var columns:Column<any>[] = []
     var attributes = objdef.passiveAttributes.concat(objdef.attributes)
+    var dirtiedEvent = new EventSystem<number>()
     for(let attribute of attributes){
         columns.push(new Column(attribute.name, obj => {
             var widget = createWidget(attribute)
             widget.value.set(obj[attribute.name])
-            widget.value.onchange.listen(val => obj[attribute.name] = val)
+            widget.value.onchange.listen(val => {
+                obj[attribute.name] = val
+                dirtiedEvent.trigger(0)
+            })
             return widget.element
         }, () => {
             var widget = createWidget(attribute)
@@ -91,8 +95,11 @@ function createTableForObject<T>(objdef:ObjDef):Table<T>{
     }
     columns.push(new Column('', obj => {
         var buttoncontainer = string2html('<div class="ui buttons"></div>')
-        var savebutton = createSaveButton(objdef, obj._id, obj)
-        
+        var savebutton = new DisableableButton('save','green', dirtiedEvent,() => {
+            update(objdef.name,obj._id,obj)
+            toastr.success('saved')
+        })
+
         var deletebutton = new Button('delete','red',() => {
             del(objdef.name, obj._id).then(() => {
                 getList(objdef.name,{
@@ -122,18 +129,4 @@ function createTableForObject<T>(objdef:ObjDef):Table<T>{
 
 function getAllAttributes(obj:ObjDef):Attribute[]{
     return obj.passiveAttributes.concat(obj.attributes)
-}
-
-function createSaveButton(objdef:ObjDef,id:string,data:any):Button{
-    return new Button('save','green',() => {
-        update(objdef.name,id,data)
-        toastr.success('saved')
-    })
-}
-
-function createDeleteButton(objdef:ObjDef,id:string):Button{
-    return new Button('delete','red',() => {
-        del(objdef.name, id)
-        toastr.error('deleted')
-    })
 }
