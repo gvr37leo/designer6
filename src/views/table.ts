@@ -44,13 +44,14 @@ class Table<T>{
 
     load(objects:T[]){
         this.body.innerHTML = ''
-        for(var object of objects){
+        for(let i = 0; i < objects.length; i++){
+            var object = objects[i]
             var row = document.createElement('tr')
             this.body.appendChild(row)            
             for(var column of this.columns){
                 var cell = document.createElement('td')
                 row.appendChild(cell)
-                cell.appendChild(column.renderer(object))
+                cell.appendChild(column.renderer(object, i))
             }
         }
     }
@@ -65,10 +66,10 @@ class Table<T>{
 
 class Column<T>{
     name:string
-    renderer:(obj:T) => HTMLElement
+    renderer:(obj:T, i:number) => HTMLElement
     filterRenderer:() => HTMLElement
 
-    constructor(name:string, renderer:(obj:T) => HTMLElement,filterRenderer:() => HTMLElement){
+    constructor(name:string, renderer:(obj:T, i:number) => HTMLElement,filterRenderer:() => HTMLElement){
         this.name = name
         this.renderer = renderer
         this.filterRenderer = filterRenderer
