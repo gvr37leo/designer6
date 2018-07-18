@@ -64,7 +64,9 @@ class DetailView{
 
     renderDetailView(id:string):DetailView{
         this.renderTemplate()
-        this.tabs = new Tabs(this.tabscontainer)
+        if(this.objdef.referencedAttributes.length > 0){
+            this.tabs = new Tabs(this.tabscontainer)
+        }
         this.dirtiedEvent = new EventSystem<number>()
         this.renderWidgets(this.objdef.passiveAttributes.concat(this.objdef.attributes))
 
@@ -133,20 +135,8 @@ class DetailView{
             let ownerOfReferencedAttribute:ObjDef = window.objidmap.get(referencedAttribute.belongsToObject)
             
             this.tabs.addTab(referencedAttribute._id,`${ownerOfReferencedAttribute.name} : ${referencedAttribute.name}`, () => {
-                let table = createTableForObject(ownerOfReferencedAttribute)
-                var filter = {}
-                filter[referencedAttribute.name] = id
-                getList(ownerOfReferencedAttribute.name, {
-                    filter:filter,
-                    paging:{
-                        limit:10,
-                        skip:0
-                    },
-                    sort:{},
-                }).then(data => {
-                    table.load(data.data)
-                })
-                return table.element
+                var gridview = new GridView(ownerOfReferencedAttribute)
+                return gridview.element
             })
             
         }

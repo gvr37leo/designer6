@@ -35,6 +35,7 @@ class DropdownWidget<T> extends Widget<T>{
 
     loadOptions(options:T[]){
         this.options = options
+        this.dropper.innerHTML = ''
         for(let option of options){
             let element = string2html(`<div class="drop">${this.displayer(option)}</div>`) as HTMLElement
             element.addEventListener('click', () => {

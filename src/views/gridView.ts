@@ -11,7 +11,7 @@ class GridView{
     tablecontainer: HTMLElement;
     table: Table<any>;
     dirtiedEvents: EventSystem<{}>[];
-    lazySync:() => Promise<any>
+    skipwidget: RangeWidget;
 
     constructor(obj:ObjDef){
         this.objdef = obj
@@ -43,7 +43,16 @@ class GridView{
         this.addButton(new Button('refresh','blue', () => {
             this.sync()
         }))
-        // this.table = createTableForObject(this.objdef)
+        this.skipwidget = new RangeWidget()
+        this.skipwidget.inputel.valueAsNumber = 0
+        this.skipwidget.inputel.step = '1'
+        this.buttoncontainer.appendChild(this.skipwidget.element)
+        this.skipwidget.value.onchange.listen(v => {
+            this.filter.paging.skip = v
+            this.sync()
+        })
+        
+
         this.table = this.createTable()
         this.sync()
     }
@@ -112,9 +121,12 @@ class GridView{
     }
 
     sync():Promise<any>{
-        return getList(this.objdef.name, this.filter).then(objects => {
-            this.dirtiedEvents = objects.data.map(v => new EventSystem())
-            this.table.load(objects.data)
+        return getList(this.objdef.name, this.filter).then(res => {
+            this.dirtiedEvents = res.data.map(v => new EventSystem())
+            this.table.load(res.data)
+            var max = Math.floor(res.collectionSize / this.filter.paging.limit)
+            this.skipwidget.inputel.max = max.toString()
+            this.skipwidget.inputel.disabled = !max
             this.tablecontainer.appendChild(this.table.element)
         })
     }

@@ -28,3 +28,12 @@
 .drop:hover{
     background-color: #2185d0
 }
+
+.range{
+    display:  flex;
+    padding: 0 10px;
+    border: 1px solid #dededf;
+    border-top-right-radius: 3px;
+    border-bottom-right-radius: 3px;
+    border-left-width: 0px;
+}
