@@ -8,9 +8,8 @@ class BooleanWidget extends Widget<boolean>{
         super()
 
         this.element = string2html(`
-        <div class="ui slider checkbox">
+        <div class="d-flex justify-content-center">
             <input  type="checkbox" />
-            <label></label>
         </div>`)
         this.inputel = this.element.querySelector('input')
 

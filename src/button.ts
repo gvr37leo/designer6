@@ -3,7 +3,7 @@ class Button{
 
     constructor(text:string,classes:string, callback:() => void){
         var template:string = `
-            <button class="ui button ${classes}" type="button">${text}</button>
+            <button class="btn ${classes}" type="button">${text}</button>
         `
         this.element = string2html(template) as HTMLButtonElement
         this.element.addEventListener('click', callback)

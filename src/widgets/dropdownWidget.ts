@@ -10,8 +10,8 @@ class DropdownWidget<T> extends Widget<T>{
         this.displayer = displayer
 
         this.element = string2html(`
-            <div class="ui input dropdownel">
-                <input class="dropinput ${classes}"/>
+            <div class="dropdownel">
+                <input class="form-control dropinput ${classes}"/>
                 <div id="dropper" class="dropper"></div>
             </div>
             `);

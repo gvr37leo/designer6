@@ -2,7 +2,7 @@ class RangeWidget extends Widget<number>{
     inputel: HTMLInputElement;
     constructor(){
         super()
-        this.element = string2html('<div class="ui input range" ><input type="range" /></div>')
+        this.element = string2html('<div class="range" ><input type="range" /></div>')
         this.inputel = this.element.querySelector('input')
 
         this.element.addEventListener('change',(e) => {

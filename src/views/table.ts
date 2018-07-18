@@ -18,7 +18,7 @@ class Table<T>{
     constructor(columns:Column<T>[]){
         this.columns = columns
         this.element = string2html(`
-            <table class="ui celled  table">
+            <table class="table table-bordered table-striped">
                 <thead>
                     <tr id="titlerow"></tr>
                     <tr id="filterrow"></tr>

@@ -8,6 +8,8 @@
 /// <reference path="modal.ts" />
 
 // filter op gridview
+// filter terug op detailview
+// filter widgets
 // pointerfilters
 // caching of andere manier om ajax overhead te weren
 

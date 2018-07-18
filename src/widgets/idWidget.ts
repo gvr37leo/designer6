@@ -4,11 +4,11 @@ class IDWidget extends Widget<string>{
     constructor(attribute:IdentityAttribute){
         super()
         this.element = string2html(`
-        <div class="ui action input">
-            <input class="" id="input" type="text" readonly/>
+        <div class="d-flex input-group">
+            <input class="form-control attachleft" id="input" type="text" readonly/>
         </div>`)
         this.inputelement = this.element.querySelector('#input') as HTMLInputElement
-        var gotoButton = new Button('goto','blue compact', () => {
+        var gotoButton = new Button('goto','btn-info attachright', () => {
             if(this.value.get() != null){
                 designer.router.pushTrigger(`/${attribute.pointerType}/${this.value.get()}`)
             }

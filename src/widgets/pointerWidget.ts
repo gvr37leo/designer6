@@ -23,29 +23,29 @@ class PointerWidget extends Widget<string>{
         this.dropdownattribute = window.attributeidmap.get(this.reffedObject.dropdownAttributePointer)
 
         this.element = string2html(`
-        <div class="ui action input">
+        <div class="d-flex">
             <div class="" id='dropddowncontainer'></div>
         </div>`)
 
         this.dropdowncontainer = this.element.querySelector('#dropddowncontainer')
-        var gotoButton = new Button('goto','blue compact', () => {
+        var gotoButton = new Button('goto','btn-info attachcenter', () => {
             if(this.value.get() != null){
                 designer.router.pushTrigger(`/${this.reffedObject.name}/${this.value.get()}`)
             }
         })
         this.element.appendChild(gotoButton.element)
         
-        this.dropdownwidget = new DropdownWidget<any>('',(val) => {
+        this.dropdownwidget = new DropdownWidget<any>('attachleft',(val) => {
             return val[this.dropdownattribute.name]
         })
         this.dropdowncontainer.appendChild(this.dropdownwidget.element)
 
-        this.clearbutton = new Button('clear','red compact',() => {
+        this.clearbutton = new Button('clear','btn-danger attachcenter',() => {
             this.value.clear()
         })
         this.element.appendChild(this.clearbutton.element)
 
-        this.createbutton = new Button('create','green compact',() => {
+        this.createbutton = new Button('create','btn-success attachright',() => {
             var createview = new DetailView(this.reffedObject).renderCreateView()
             window.globalModal.set(createview.element)
             window.globalModal.show()

@@ -37,3 +37,20 @@
     border-bottom-right-radius: 3px;
     border-left-width: 0px;
 }
+
+.attachleft{
+    border-bottom-right-radius: 0px;
+    border-top-right-radius: 0px;
+    border-right-width: 0px;
+}
+
+.attachright{
+    border-bottom-left-radius: 0px;
+    border-top-left-radius: 0px;
+    border-left-width: 0px;
+}
+
+.attachcenter{
+    border-radius: 0px;
+    border-width: 1px 0px;
+}

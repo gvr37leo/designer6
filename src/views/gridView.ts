@@ -26,13 +26,13 @@ class GridView{
         this.element = string2html(`
         <div class="">
             <h1></h1>
-            <div class="ui buttons" id="buttoncontainer"></div>
+            <div class="mb-3 d-flex" id="buttoncontainer"></div>
             <div class="" style="margin-top:10px;" id="tablecontainer"></div>
         </div>`)
         this.buttoncontainer = this.element.querySelector('#buttoncontainer')
         this.element.querySelector('h1').innerText = this.objdef.name
         this.tablecontainer = this.element.querySelector('#tablecontainer')
-        this.addButton(new Button('create','green',() => {
+        this.addButton(new Button('create','btn-success attachleft',() => {
             var detailview = new DetailView(obj)
             detailview.renderCreateView()
             window.globalModal.set(detailview.element)
@@ -42,7 +42,7 @@ class GridView{
                 this.sync()
             })
         }))
-        this.addButton(new Button('refresh','blue', () => {
+        this.addButton(new Button('refresh','btn-info attachcenter', () => {
             this.sync()
         }))
         this.skipwidget = new RangeWidget()
@@ -78,15 +78,14 @@ class GridView{
                 var widget = createWidget(attribute)
                 let filterDirtiedEvent = new EventSystem()
                 let changeTriggeredByResetButton = false;
-                var deletebutton = new DisableableButton('X','red',filterDirtiedEvent,() => {
+                var deletebutton = new DisableableButton('X','btn-danger ml-3',filterDirtiedEvent,() => {
                     changeTriggeredByResetButton = true
                     widget.value.clear()
                     changeTriggeredByResetButton = false
                     delete this.filter.filter[attribute.name]
                     this.sync()
                 })
-
-                widget.element.appendChild(deletebutton.element)
+                
 
                 widget.value.onchange.listen(val => {
                     this.filter.filter[attribute.name] = val
@@ -95,18 +94,19 @@ class GridView{
                         this.sync()
                     }
                 })
-                
-
-                return widget.element
+                var element = string2html('<div class="d-flex"></div>')
+                element.appendChild(widget.element)
+                element.appendChild(deletebutton.element)
+                return element
             }))
         }
         columns.push(new Column('', (obj, i) => {
-            var buttoncontainer = string2html('<div class="ui buttons"></div>')
-            var savebutton = new DisableableButton('save','green', this.dirtiedEvents[i],() => {
+            var buttoncontainer = string2html('<div class="d-flex"></div>')
+            var savebutton = new DisableableButton('save','btn-success attachleft', this.dirtiedEvents[i],() => {
                 update(objdef.name,obj._id,obj).then(() => toastr.success('saved'))
             })
     
-            var deletebutton = new Button('delete','red',() => {
+            var deletebutton = new Button('delete','btn-danger attachright',() => {
                 del(objdef.name, obj._id).then(() => {
                     this.sync()
                     toastr.error('deleted')

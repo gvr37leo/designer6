@@ -7,24 +7,16 @@ class DetailView{
 
     objdef:ObjDef
     template:string = `
-    <div id="detailview" class="ui padded grid">
-        <div class="row">
-            <h1></h1>
+    <div id="detailview" class="">
+        <h1></h1>
+        <div id="buttoncontainer" class="btn-group mb-3">
         </div>
-        <div class="row">
-            <div id="buttoncontainer" class="ui buttons">
-            </div>
-        </div>
-        
-
-        <div class="row">
-            <div id="widgetcontainer" style="border: 1px solid #dededf; padding: 10px; border-radius: 5px;" class="ui form">
+        <div>
+            <div id="widgetcontainer" style="border: 1px solid #dededf; padding: 10px; border-radius: 5px;" class="mb-3 d-inline-flex flex-column">
             </div>
         </div>
 
-        <div class="row">
-            <div id="tabscontainer" class="">
-            </div>
+        <div id="tabscontainer" class="">
         </div>
     </div>
     `
@@ -54,12 +46,12 @@ class DetailView{
 
         this.renderWidgets(this.objdef.attributes)
 
-        this.addButton(new Button('create','green', () => {
+        this.addButton(new Button('create','btn-success', () => {
             create(this.objdef.name,this.data).then(val => {
                 this.onObjectCreated.trigger(val.insertedId)
             })
         }))
-        this.addButton(new Button('up', 'teal',() => {
+        this.addButton(new Button('up', 'btn-info',() => {
             window.location.pathname = `/${this.objdef.name}`
         }))
 
@@ -74,23 +66,23 @@ class DetailView{
         this.dirtiedEvent = new EventSystem<number>()
         this.renderWidgets(this.objdef.passiveAttributes.concat(this.objdef.attributes))
 
-        var savebutton = new DisableableButton('save','green',this.dirtiedEvent,() => {
+        var savebutton = new DisableableButton('save','btn-success',this.dirtiedEvent,() => {
             update(this.objdef.name,id,this.data)
             toastr.success('saved')
         })
         this.addButton(savebutton)
-        this.addButton(new Button('delete','red',() => {
+        this.addButton(new Button('delete','btn-danger',() => {
             del(this.objdef.name, id).then(() => {
                 designer.router.pushTrigger(`/${this.objdef.name}`)
             })
             toastr.error('deleted')
         }))
-        this.addButton(new Button('refresh','blue', () => {
+        this.addButton(new Button('refresh','btn-info', () => {
             this.refresh(id).then(v => {
                 savebutton.element.disabled = true
             })
         }))
-        this.addButton(new Button('up', 'teal',() => {
+        this.addButton(new Button('up', 'btn-info',() => {
             designer.router.pushTrigger(`/${this.objdef.name}`)
         }))
 

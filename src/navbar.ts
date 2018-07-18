@@ -4,7 +4,7 @@ class Navbar{
 
     constructor(){
         this.element = string2html(`
-        <div class="ui secondary pointing menu">
+        <div class="nav">
         </div>`)
         this.addItem('Home','/')
     }
@@ -16,7 +16,7 @@ class Navbar{
     }
 
     addItem(text:string, url:string){
-        var anchortag = string2html(`<a class="item" href="${url}">${text}</a>`)
+        var anchortag = string2html(`<li class="nav-item"><a class="nav-link" href="${url}">${text}</a></li>`)
         anchortag.addEventListener('click', e => {
             e.preventDefault()
             designer.router.pushTrigger(url)
