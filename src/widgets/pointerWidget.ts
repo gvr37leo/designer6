@@ -1,5 +1,4 @@
 class PointerWidget extends Widget<string>{
-    anchortag: HTMLAnchorElement;
     clearbutton: Button;
     dropdowncontainer: HTMLElement;
     attribute: PointerAttribute;
@@ -26,11 +25,15 @@ class PointerWidget extends Widget<string>{
         this.element = string2html(`
         <div class="ui action input">
             <div class="" id='dropddowncontainer'></div>
-            <a class="ui button blue compact" href="/" >goto</a>
         </div>`)
 
         this.dropdowncontainer = this.element.querySelector('#dropddowncontainer')
-        this.anchortag = this.element.querySelector('a')
+        var gotoButton = new Button('goto','blue compact', () => {
+            if(this.value.get() != null){
+                designer.router.pushTrigger(`/${this.reffedObject.name}/${this.value.get()}`)
+            }
+        })
+        this.element.appendChild(gotoButton.element)
         
         this.dropdownwidget = new DropdownWidget<any>('',(val) => {
             return val[this.dropdownattribute.name]
@@ -64,9 +67,7 @@ class PointerWidget extends Widget<string>{
         this.value.onchange.listen(val => {
             if(val == null){
                 this.dropdownwidget.input.value = 'null'
-                this.anchortag.href = ''
             }else{
-                this.anchortag.href = `/${this.reffedObject.name}/${val}`
                 get(this.reffedObject.name,this.value.get()).then(data => {
                     if(data == null){
                         this.dropdownwidget.input.value = 'nullptr'

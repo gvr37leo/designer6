@@ -9,6 +9,9 @@ class DetailView{
     template:string = `
     <div id="detailview" class="ui padded grid">
         <div class="row">
+            <h1></h1>
+        </div>
+        <div class="row">
             <div id="buttoncontainer" class="ui buttons">
             </div>
         </div>
@@ -35,6 +38,7 @@ class DetailView{
     widgetcontainer: HTMLElement;
     tabscontainer: HTMLElement;
     dirtiedEvent: EventSystem<number>;
+    header: HTMLHeadingElement;
         
 
 
@@ -70,11 +74,11 @@ class DetailView{
         this.dirtiedEvent = new EventSystem<number>()
         this.renderWidgets(this.objdef.passiveAttributes.concat(this.objdef.attributes))
 
-        
-        this.addButton(new DisableableButton('save','green',this.dirtiedEvent,() => {
+        var savebutton = new DisableableButton('save','green',this.dirtiedEvent,() => {
             update(this.objdef.name,id,this.data)
             toastr.success('saved')
-        }))
+        })
+        this.addButton(savebutton)
         this.addButton(new Button('delete','red',() => {
             del(this.objdef.name, id).then(() => {
                 designer.router.pushTrigger(`/${this.objdef.name}`)
@@ -82,7 +86,9 @@ class DetailView{
             toastr.error('deleted')
         }))
         this.addButton(new Button('refresh','blue', () => {
-            this.refresh(id)
+            this.refresh(id).then(v => {
+                savebutton.element.disabled = true
+            })
         }))
         this.addButton(new Button('up', 'teal',() => {
             designer.router.pushTrigger(`/${this.objdef.name}`)
@@ -107,8 +113,6 @@ class DetailView{
             
         })
 
-        
-
         return this
     }
 
@@ -117,6 +121,8 @@ class DetailView{
         this.buttoncontainer = this.element.querySelector('#buttoncontainer')
         this.widgetcontainer = this.element.querySelector('#widgetcontainer')
         this.tabscontainer = this.element.querySelector('#tabscontainer')
+        this.header = this.element.querySelector('h1')
+        this.header.innerText = this.objdef.name
     }
 
     renderWidgets(attributes:Attribute[]){
@@ -147,7 +153,7 @@ class DetailView{
     }
 
     refresh(id){
-        get(this.objdef.name,id).then(data => this.load(data)) 
+        return get(this.objdef.name,id).then(data => this.load(data)) 
     }
 
     load(data:any){

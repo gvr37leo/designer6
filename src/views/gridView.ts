@@ -25,10 +25,12 @@ class GridView{
         }
         this.element = string2html(`
         <div class="">
+            <h1></h1>
             <div class="ui buttons" id="buttoncontainer"></div>
             <div class="" style="margin-top:10px;" id="tablecontainer"></div>
         </div>`)
         this.buttoncontainer = this.element.querySelector('#buttoncontainer')
+        this.element.querySelector('h1').innerText = this.objdef.name
         this.tablecontainer = this.element.querySelector('#tablecontainer')
         this.addButton(new Button('create','green',() => {
             var detailview = new DetailView(obj)

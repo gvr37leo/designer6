@@ -8,12 +8,8 @@
 /// <reference path="modal.ts" />
 
 // filter op gridview
-// filter voor widgets
-// dirtiedevent op table save knop
-// titels
 // pointerfilters
 // caching of andere manier om ajax overhead te weren
-// gridview limit/skipss
 
 interface Window{
     objidmap:Map<string,ObjDef>
