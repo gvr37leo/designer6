@@ -6,6 +6,8 @@
 /// <reference path="widgets/pointerWidget.ts" />
 /// <reference path="widgets/rangeWidget.ts" />
 /// <reference path="widgets/textWidget.ts" />
+/// <reference path="widgets/enumWidget.ts" />
+
 /// <reference path="widgets/widget.ts" />
 
 
@@ -43,6 +45,9 @@ function createWidget(attribute:Attribute):Widget<any>{
             break;
         case 'id':
             widget = new IDWidget(attribute as IdentityAttribute)
+            break;
+        case 'enum':
+            widget = new EnumWidget(attribute as EnumAttribute)
             break;
         case 'pointer':
             widget = new PointerWidget(attribute as PointerAttribute)

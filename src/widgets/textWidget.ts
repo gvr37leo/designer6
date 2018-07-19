@@ -1,6 +1,5 @@
 /// <reference path="../../node_modules/eventsystemx/EventSystem.ts" />
 /// <reference path="widget.ts" />
-
 /// <reference path="../localUtils.ts" />
 
 class TextWidget extends Widget<string>{

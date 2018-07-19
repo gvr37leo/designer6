@@ -6,10 +6,10 @@ var selfdef = new AppDef([
     new ObjDef('2','attribute','3'),
 ],[
     new TextAttribute('1','name','1'),
-    new TextAttribute('2','dropdownAttribute','1'),
+    new PointerAttribute('2','dropdownAttribute','1','2'),
 
     new TextAttribute('3','name','2'),
-    new TextAttribute('4','dataType','2'),
+    new EnumAttribute('4','dataType','2',['text','number','boolean','date','pointer']),
     new PointerAttribute('5','belongsToObject','2','1'),
 ])
 

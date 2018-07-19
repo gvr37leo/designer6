@@ -108,3 +108,11 @@ class PointerAttribute extends Attribute{
         this.usingOwnColumn = usingOwnColumn
     }
 }
+
+class EnumAttribute extends Attribute{
+    options:string[]
+    constructor(_id: string, name: string, belongsToObject: string,options:string[]){
+        super(_id, name, belongsToObject, 'enum')
+        this.options = options
+    }
+}

@@ -55,7 +55,7 @@ class GridView{
         this.skipwidget.inputel.step = '1'
         this.buttoncontainer.appendChild(this.skipwidget.element)
         this.skipwidget.value.onchange.listen(v => {
-            this.query.paging.skip = v
+            this.query.paging.skip = v * this.query.paging.limit
             this.sync()
         })
         
