@@ -135,6 +135,9 @@ class DetailView{
             this.tabs.addTab(referencedAttribute._id,`${ownerOfReferencedAttribute.name} : ${referencedAttribute.name}`, () => {
                 var gridview = new GridView(ownerOfReferencedAttribute)
                 gridview.filterwidgetmap.get(referencedAttribute._id).value.set(id)
+                gridview.onCreateViewInstantiated.listen(createView => {
+                    createView.widgetmap.get(referencedAttribute._id).value.set(this.data._id)
+                })
                 gridview.sync()
                 return gridview.element
             })

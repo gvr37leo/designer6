@@ -1,6 +1,17 @@
 /// <reference path="src/designer.ts" />
 /// <reference path="src/views/table.ts" />
 
+var selfdef = new AppDef([
+    new ObjDef('1','object','1'),
+    new ObjDef('2','attribute','3'),
+],[
+    new TextAttribute('1','name','1'),
+    new TextAttribute('2','dropdownAttribute','1'),
+
+    new TextAttribute('3','name','2'),
+    new TextAttribute('4','dataType','2'),
+    new PointerAttribute('5','belongsToObject','2','1'),
+])
 
 var appdef = new AppDef([
     new ObjDef('1','persoon','1'),
@@ -22,7 +33,7 @@ var appdef = new AppDef([
     new NumberAttribute('11','salaris','3'),
 ])
 
-var designer = new Designer(document.querySelector('#main'), appdef)
+var designer = new Designer(document.querySelector('#main'), selfdef)
 
 
 

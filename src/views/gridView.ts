@@ -14,6 +14,7 @@ class GridView{
     skipwidget: RangeWidget;
     filterwidgetmap: Map<string, Widget<any>> = new Map();
     sortwidgetmap: Map<string, Widget<any>> = new Map();
+    onCreateViewInstantiated:EventSystem<DetailView> = new EventSystem()
 
     constructor(obj:ObjDef){
         this.objdef = obj
@@ -35,11 +36,12 @@ class GridView{
         this.element.querySelector('h1').innerText = this.objdef.name
         this.tablecontainer = this.element.querySelector('#tablecontainer')
         this.addButton(new Button('create','btn-success attachleft',() => {
-            var detailview = new DetailView(obj)
-            detailview.renderCreateView()
-            window.globalModal.set(detailview.element)
+            var createDetailview = new DetailView(obj)
+            createDetailview.renderCreateView()
+            this.onCreateViewInstantiated.trigger(createDetailview)
+            window.globalModal.set(createDetailview.element)
             window.globalModal.show()
-            detailview.onObjectCreated.listen(createdId => {
+            createDetailview.onObjectCreated.listen(createdId => {
                 window.globalModal.hide()
                 this.sync()
             })
