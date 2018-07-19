@@ -63,14 +63,6 @@ class NumberAttribute extends Attribute{
     }
 }
 
-// class enumAttribute extends Attribute{
-//     enumtypes:string[]//for type enum
-//     constructor(_id: string,name:string, enumtypes:string[],belongsToColumn:string = null,hidden:boolean = false){
-//         super(_id,name, 'enum',belongsToColumn,hidden)
-//         this.enumtypes = enumtypes
-//     }
-// }
-
 class TextAttribute extends Attribute{
     constructor(_id: string, name: string, belongsToObject: string){
         super(_id, name, belongsToObject, 'text')
@@ -86,15 +78,6 @@ class IdentityAttribute extends Attribute{
         // this.readonly = true
     }
 }
-
-
-// class ArrayAttribute extends Attribute{
-//     pointsToObject:string
-//     constructor(_id: string, name: string, pointsToObject: string, belongsToObject: string){
-//         super(_id, name, belongsToObject, 'array')
-//         this.pointsToObject = pointsToObject
-//     }
-// }
 
 class PointerAttribute extends Attribute{
     pointsToObject:string
