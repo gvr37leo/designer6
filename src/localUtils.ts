@@ -74,59 +74,6 @@ function array2map<T,F>(array:T[], fieldSelector:(obj:T) => F):Map<F,T>{
     return map;
 }
 
-function createTableForObject<T>(objdef:ObjDef):Table<T>{
-    var table
-    var columns:Column<any>[] = []
-    var attributes = objdef.passiveAttributes.concat(objdef.attributes)
-    var dirtiedEvent = new EventSystem<number>()
-    for(let attribute of attributes){
-        columns.push(new Column(attribute.name, obj => {
-            var widget = createWidget(attribute)
-            widget.value.set(obj[attribute.name])
-            widget.value.onchange.listen(val => {
-                obj[attribute.name] = val
-                dirtiedEvent.trigger(0)
-            })
-            return widget.element
-        }, () => {
-            var widget = createWidget(attribute)
-            return widget.element
-        }))
-    }
-    columns.push(new Column('', obj => {
-        var buttoncontainer = string2html('<div class="ui buttons"></div>')
-        var savebutton = new DisableableButton('save','green', dirtiedEvent,() => {
-            update(objdef.name,obj._id,obj)
-            toastr.success('saved')
-        })
-
-        var deletebutton = new Button('delete','red',() => {
-            del(objdef.name, obj._id).then(() => {
-                getList(objdef.name,{
-                    filter:{},
-                    sort:{},
-                    paging:{
-                        skip:0,
-                        limit:10
-                    }
-                }).then(data => {
-                    table.load(data.data)
-                })
-            })
-            toastr.error('deleted')
-        })
-        buttoncontainer.appendChild(savebutton.element)
-        buttoncontainer.appendChild(deletebutton.element)
-        return buttoncontainer
-    },() => {
-        return string2html('<div></div>')
-    }))
-    table = new Table(columns)
-
-    
-    return table
-}
-
 function getAllAttributes(obj:ObjDef):Attribute[]{
     return obj.passiveAttributes.concat(obj.attributes)
 }

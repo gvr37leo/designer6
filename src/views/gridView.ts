@@ -67,15 +67,10 @@ class GridView{
         var attributes = getAllAttributes(this.objdef)
         var table;
         for(let attribute of attributes){
-            columns.push(new Column(attribute.name, (obj, i) => {
-                var widget = createWidget(attribute)
-                widget.value.set(obj[attribute.name])
-                widget.value.onchange.listen(val => {
-                    obj[attribute.name] = val
-                    this.dirtiedEvents[i].trigger(0)
-                })
-                return widget.element
-            }, () => {
+            
+            columns.push(new Column([() => {
+                return string2html(`<span>${attribute.name}</span>`)
+            },() => {
 
                 var widget = createWidget(attribute)
                 this.filterwidgetmap.set(attribute._id,widget)
@@ -101,9 +96,22 @@ class GridView{
                 element.appendChild(widget.element)
                 element.appendChild(deletebutton.element)
                 return element
+            }],(obj, i) => {
+                var widget = createWidget(attribute)
+                widget.value.set(obj[attribute.name])
+                widget.value.onchange.listen(val => {
+                    obj[attribute.name] = val
+                    this.dirtiedEvents[i].trigger(0)
+                })
+                return widget.element
             }))
         }
-        columns.push(new Column('', (obj, i) => {
+        
+        columns.push(new Column([() => {
+            return document.createElement('div')
+        },() => {
+            return document.createElement('div')
+        }],(obj, i) => {
             var buttoncontainer = string2html('<div class="d-flex"></div>')
             var savebutton = new DisableableButton('save','btn-success attachleft', this.dirtiedEvents[i],() => {
                 update(objdef.name,obj._id,obj).then(() => toastr.success('saved'))
@@ -118,8 +126,6 @@ class GridView{
             buttoncontainer.appendChild(savebutton.element)
             buttoncontainer.appendChild(deletebutton.element)
             return buttoncontainer
-        },() => {
-            return document.createElement('div')
         }))
         table = new Table(columns)
         return table

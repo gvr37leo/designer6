@@ -10,9 +10,7 @@ class Table<T>{
     element: HTMLTableElement;
     head: HTMLTableSectionElement;
     body: HTMLTableSectionElement;
-    titlerow: HTMLTableRowElement;
-    filterrow: HTMLTableRowElement;
-
+    headerRows:HTMLTableRowElement[] = []
     
 
     constructor(columns:Column<T>[]){
@@ -20,25 +18,27 @@ class Table<T>{
         this.element = string2html(`
             <table class="table table-bordered table-striped">
                 <thead>
-                    <tr id="titlerow"></tr>
-                    <tr id="filterrow"></tr>
                 </thead>
                 <tbody></tbody>
             </table>`) as HTMLTableElement
         this.head = this.element.querySelector('thead')
-        this.titlerow = this.head.querySelector('#titlerow')
-        this.filterrow = this.head.querySelector('#filterrow')
         this.body = this.element.querySelector('tbody')
         this.addHeader()
     }
 
     addHeader(){
-        for(var column of this.columns){
-            var cell = this.createTableHeadCell(this.titlerow)
-            cell.innerText = column.name
+        for(var header of this.columns[0].headerRenderers){
+            var row = document.createElement('tr')
+            this.headerRows.push(row)
+            this.head.appendChild(row)
+        }
 
-            var cell2 = this.createTableHeadCell(this.filterrow)
-            cell2.appendChild(column.filterRenderer())
+        for(var column of this.columns){
+            for(let i = 0; i < column.headerRenderers.length; i++){
+                var headerRenderer = column.headerRenderers[i]
+                var cell = this.createTableHeadCell(this.headerRows[i])
+                cell.appendChild(headerRenderer())
+            }
         }
     }
 
@@ -65,13 +65,11 @@ class Table<T>{
 }
 
 class Column<T>{
-    name:string
     renderer:(obj:T, i:number) => HTMLElement
-    filterRenderer:() => HTMLElement
+    headerRenderers:(() => HTMLElement)[]
 
-    constructor(name:string, renderer:(obj:T, i:number) => HTMLElement,filterRenderer:() => HTMLElement){
-        this.name = name
+    constructor(headerRenderers:(() => HTMLElement)[], renderer:(obj:T, i:number) => HTMLElement){
+        this.headerRenderers = headerRenderers
         this.renderer = renderer
-        this.filterRenderer = filterRenderer
     }
 }
