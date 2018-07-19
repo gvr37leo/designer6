@@ -54,3 +54,13 @@
     border-radius: 0px;
     border-width: 1px 0px;
 }
+
+.greyborder{
+    border:1px solid #dededf;
+    border-radius: 3px;
+}
+
+input[type=checkbox]{
+    width: 30px;
+    height:30px;
+}

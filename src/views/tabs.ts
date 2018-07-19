@@ -16,8 +16,8 @@ class Tabs{
         this.anchor = anchor
         this.element = createAndAppend(anchor,`
             <div>
-                <div class="nav nav-tabs" id="tabcontainer"></div>
-                <div class="" id="viewcontainer"></div>
+                <div class="pb-1 d-flex" id="tabcontainer"></div>
+                <div class="p-3 greyborder" style="overflow:auto;" id="viewcontainer"></div>
             </div>
         `)
 

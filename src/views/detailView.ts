@@ -93,7 +93,7 @@ class DetailView{
 
         get(this.objdef.name,id).then(val => {
             if(val == null){
-                //nullptr
+                //nullptr 404
             }else{
                 this.load(val)
                 for(var widget of this.widgetmap.values()){
@@ -134,6 +134,8 @@ class DetailView{
             
             this.tabs.addTab(referencedAttribute._id,`${ownerOfReferencedAttribute.name} : ${referencedAttribute.name}`, () => {
                 var gridview = new GridView(ownerOfReferencedAttribute)
+                gridview.filterwidgetmap.get(referencedAttribute._id).value.set(id)
+                gridview.sync()
                 return gridview.element
             })
             

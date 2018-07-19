@@ -7,8 +7,6 @@
 /// <reference path="views/gridView.ts" />
 /// <reference path="modal.ts" />
 
-// filter op gridview
-// filter terug op detailview
 // filter widgets
 // pointerfilters
 // caching of andere manier om ajax overhead te weren
@@ -55,12 +53,14 @@ class Designer{
         this.router.listen(new RegExp('^/$'), res => {
             var obj = this.appDef.objdefinitions[0]
             var gridview = new GridView(obj)
+            gridview.sync()
             this.viewcontainer.innerHTML = ''
             this.viewcontainer.appendChild(gridview.element)
         })
         this.router.listen(new RegExp('^/([a-zA-Z0-9]+)$'), res => {
             var obj = objnamemap.get(res[1])
             var gridview = new GridView(obj)
+            gridview.sync()
             this.viewcontainer.innerHTML = ''
             this.viewcontainer.appendChild(gridview.element)
         })

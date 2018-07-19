@@ -4,7 +4,7 @@ class IDWidget extends Widget<string>{
     constructor(attribute:IdentityAttribute){
         super()
         this.element = string2html(`
-        <div class="d-flex input-group">
+        <div class="input-group" style="display:flex; flex-wrap:nowrap;">
             <input class="form-control attachleft" id="input" type="text" readonly/>
         </div>`)
         this.inputelement = this.element.querySelector('#input') as HTMLInputElement

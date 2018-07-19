@@ -5,17 +5,19 @@
 class GridView{
     objdef: ObjDef;
     element: HTMLElement;
-    filter:Query
+    query:Query
 
     buttoncontainer: HTMLElement;
     tablecontainer: HTMLElement;
     table: Table<any>;
     dirtiedEvents: EventSystem<{}>[];
     skipwidget: RangeWidget;
+    filterwidgetmap: Map<string, Widget<any>> = new Map();
+    sortwidgetmap: Map<string, Widget<any>> = new Map();
 
     constructor(obj:ObjDef){
         this.objdef = obj
-        this.filter = {
+        this.query = {
             filter:{},
             sort:{},
             paging:{
@@ -45,18 +47,18 @@ class GridView{
         this.addButton(new Button('refresh','btn-info attachcenter', () => {
             this.sync()
         }))
+
         this.skipwidget = new RangeWidget()
         this.skipwidget.inputel.valueAsNumber = 0
         this.skipwidget.inputel.step = '1'
         this.buttoncontainer.appendChild(this.skipwidget.element)
         this.skipwidget.value.onchange.listen(v => {
-            this.filter.paging.skip = v
+            this.query.paging.skip = v
             this.sync()
         })
         
 
         this.table = this.createTable()
-        this.sync()
     }
 
     createTable():Table<any>{
@@ -76,19 +78,20 @@ class GridView{
             }, () => {
 
                 var widget = createWidget(attribute)
+                this.filterwidgetmap.set(attribute._id,widget)
                 let filterDirtiedEvent = new EventSystem()
                 let changeTriggeredByResetButton = false;
                 var deletebutton = new DisableableButton('X','btn-danger ml-3',filterDirtiedEvent,() => {
                     changeTriggeredByResetButton = true
                     widget.value.clear()
                     changeTriggeredByResetButton = false
-                    delete this.filter.filter[attribute.name]
+                    delete this.query.filter[attribute.name]
                     this.sync()
                 })
                 
 
                 widget.value.onchange.listen(val => {
-                    this.filter.filter[attribute.name] = val
+                    this.query.filter[attribute.name] = val
                     if(changeTriggeredByResetButton == false){
                         filterDirtiedEvent.trigger(0)
                         this.sync()
@@ -123,10 +126,10 @@ class GridView{
     }
 
     sync():Promise<any>{
-        return getList(this.objdef.name, this.filter).then(res => {
+        return getList(this.objdef.name, this.query).then(res => {
             this.dirtiedEvents = res.data.map(v => new EventSystem())
             this.table.load(res.data)
-            var max = Math.floor(res.collectionSize / this.filter.paging.limit)
+            var max = Math.floor(res.collectionSize / this.query.paging.limit)
             this.skipwidget.inputel.max = max.toString()
             this.skipwidget.inputel.disabled = !max
             this.tablecontainer.appendChild(this.table.element)
