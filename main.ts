@@ -11,6 +11,7 @@ var selfdef = new AppDef([
     new TextAttribute('3','name','2'),
     new EnumAttribute('4','dataType','2',['text','number','boolean','date','pointer']),
     new PointerAttribute('5','belongsToObject','2','1'),
+    new PointerAttribute('6','pointsToObject','2','1')
 ])
 
 var appdef = new AppDef([
