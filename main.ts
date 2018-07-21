@@ -1,6 +1,29 @@
 /// <reference path="src/designer.ts" />
 /// <reference path="src/views/table.ts" />
 
+function generateAppdef(){
+    var query = {
+        filter:{},
+        paging:{
+            limit:0,
+            skip:0
+        },
+        sort:{}
+    }
+    Promise.all([getList<any>('object',query),getList<any>('attribute',query)]).then(res => {
+        var objects = res[0].data
+        var attributes = res[1].data
+
+        var appdef = new AppDef(
+            objects.map(obj => new ObjDef(obj._id,obj.name,obj.dropdownAttributePointer)),
+            attributes.map(attribute => Attribute.makeAttributeFromObject(attribute))
+        )
+        console.log(appdef)
+        download('appdef',JSON.stringify(appdef, null, '\t'))
+    })
+    
+}
+
 var selfdef = new AppDef([
     new ObjDef('1','object','1'),
     new ObjDef('2','attribute','3'),
@@ -35,6 +58,6 @@ var appdef = new AppDef([
 ])
 
 var designer = new Designer(document.querySelector('#main'), selfdef)
-
+designer.navbar.element.appendChild(new Button('generate','btn-info',generateAppdef).element)
 
 

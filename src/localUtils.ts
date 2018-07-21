@@ -82,3 +82,16 @@ function array2map<T,F>(array:T[], fieldSelector:(obj:T) => F):Map<F,T>{
 function getAllAttributes(obj:ObjDef):Attribute[]{
     return obj.passiveAttributes.concat(obj.attributes)
 }
+
+function download(filename, text) {
+    var element = document.createElement('a');
+    element.setAttribute('href', 'data:application/json;charset=utf-8,' + encodeURIComponent(text));
+    element.setAttribute('download', filename);
+  
+    element.style.display = 'none';
+    document.body.appendChild(element);
+  
+    element.click();
+  
+    document.body.removeChild(element);
+  }

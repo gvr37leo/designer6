@@ -42,7 +42,34 @@ class Attribute{
         this.dataType = dataType
     }
 
-    static makeAttributeFromObject
+    static makeAttributeFromObject(attribute:Attribute):Attribute{
+        var newAttribute:Attribute = null;
+        switch(attribute.dataType){
+            case 'text':
+                newAttribute = new TextAttribute(attribute._id,attribute.name,attribute.belongsToObject)
+                break;
+            case 'boolean':
+                newAttribute = new BooleanAttribute(attribute._id,attribute.name,attribute.belongsToObject)
+                break;
+            case 'pointer':
+                newAttribute = new PointerAttribute(attribute._id,attribute.name,attribute.belongsToObject,(attribute as PointerAttribute).pointsToObject)
+                break;
+            case 'date':
+                newAttribute = new DateAttribute(attribute._id,attribute.name,attribute.belongsToObject)
+                break;
+            case 'number':
+                newAttribute = new NumberAttribute(attribute._id,attribute.name,attribute.belongsToObject)
+                break;
+
+// these should never be hit because they shouldnt have to be made in the editor and are added automatically in the addimplicitrefs function
+            case 'id':
+                newAttribute = new IdentityAttribute(attribute._id,attribute.name,attribute.belongsToObject)
+                break;
+        }
+        newAttribute.belongsToObject = attribute.belongsToObject
+
+        return newAttribute
+    }
 }
 
 class BooleanAttribute extends Attribute{

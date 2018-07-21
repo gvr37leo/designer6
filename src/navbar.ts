@@ -4,7 +4,7 @@ class Navbar{
 
     constructor(){
         this.element = string2html(`
-        <div class="nav">
+        <div class="nav pt-1 pb-1" style="border-bottom: 3px solid black;">
         </div>`)
         this.addItem('Home','/')
     }
