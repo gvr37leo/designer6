@@ -7,9 +7,6 @@
 /// <reference path="views/gridView.ts" />
 /// <reference path="modal.ts" />
 
-// generate appdef
-// sort
-// filter widgets
 // pointerfilters
 // caching of andere manier om ajax overhead te weren
 

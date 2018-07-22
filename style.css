@@ -64,3 +64,23 @@ input[type=checkbox]{
     width: 30px;
     height:30px;
 }
+
+.form-control{
+    min-width: 100px;
+    
+}
+
+.showme{ 
+    visibility: hidden;
+}
+.showhim:hover .showme{
+    visibility: visible;
+}
+
+.table thead th{
+    vertical-align: middle;
+}
+
+.table td{
+    vertical-align: inherit;
+}

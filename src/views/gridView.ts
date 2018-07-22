@@ -1,5 +1,6 @@
 /// <reference path="table.ts" />
 /// <reference path="../definition.ts" />
+/// <reference path="../widgets/clearableWidget.ts" />
 
 
 class GridView{
@@ -71,33 +72,54 @@ class GridView{
         for(let attribute of attributes){
             
             columns.push(new Column([() => {
-                return string2html(`<span>${attribute.name}</span>`)
-            },() => {
-
-                var widget = createWidget(attribute)
-                this.filterwidgetmap.set(attribute._id,widget)
-                let filterDirtiedEvent = new EventSystem()
-                let changeTriggeredByResetButton = false;
-                var deletebutton = new DisableableButton('X','btn-danger ml-3',filterDirtiedEvent,() => {
-                    changeTriggeredByResetButton = true
-                    widget.value.clear()
-                    changeTriggeredByResetButton = false
-                    delete this.query.filter[attribute.name]
+                var element = string2html(`
+                <div class="showhim" style="display:flex; justify-content: space-between; align-items: center;">
+                    <div>${attribute.name}</div>
+                    <div class="showme">
+                        <div id="asc"><i class="fas fa-angle-up"></i></div>
+                        <div id="desc"><i class="fas fa-angle-down"></i></div>
+                    </div>
+                </div>`)
+                var asc = element.querySelector('#asc')
+                var desc = element.querySelector('#desc')
+                asc.addEventListener('click',e => {
+                    var sort = {}
+                    sort[attribute.name] = 1
+                    this.query.sort = sort
                     this.sync()
                 })
+
+                desc.addEventListener('click', e => {
+                    var sort = {}
+                    sort[attribute.name] = -1
+                    this.query.sort = sort
+                    this.sync()
+                })
+
+                return element
+            },() => {
+
+                var widget = createFilterWidget(attribute)
+                this.filterwidgetmap.set(attribute._id,widget)
+                let changeTriggeredByUser = true;
+                var clearablewidget = new ClearableWidget(widget)
+                clearablewidget.clearbutton.callback = () => {
+                    changeTriggeredByUser = false
+                    widget.value.clear()
+                    changeTriggeredByUser = true
+                    clearablewidget.clearbutton.element.disabled = true
+                    delete this.query.filter[attribute.name]
+                    this.sync()    
+                }
                 
 
                 widget.value.onchange.listen(val => {
-                    this.query.filter[attribute.name] = val
-                    if(changeTriggeredByResetButton == false){
-                        filterDirtiedEvent.trigger(0)
+                    if(changeTriggeredByUser == true){
+                        this.query.filter[attribute.name] = val
                         this.sync()
                     }
                 })
-                var element = string2html('<div class="d-flex"></div>')
-                element.appendChild(widget.element)
-                element.appendChild(deletebutton.element)
-                return element
+                return clearablewidget.element
             }],(obj, i) => {
                 var widget = createWidget(attribute)
                 widget.value.set(obj[attribute.name])

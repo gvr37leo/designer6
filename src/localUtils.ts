@@ -7,6 +7,9 @@
 /// <reference path="widgets/rangeWidget.ts" />
 /// <reference path="widgets/textWidget.ts" />
 /// <reference path="widgets/enumWidget.ts" />
+/// <reference path="widgets/fromtoWidget.ts" />
+/// <reference path="widgets/textFilterWidget.ts" />
+
 
 /// <reference path="widgets/widget.ts" />
 
@@ -54,6 +57,35 @@ function createWidget(attribute:Attribute):Widget<any>{
             break;
         default://text
             widget = new TextWidget()
+            break;
+    }
+    return widget
+}
+
+function createFilterWidget(attribute:Attribute):Widget<any>{
+    var widget:Widget<any>
+    switch (attribute.dataType) {
+        case 'boolean':
+            widget = new BooleanWidget()
+            break;
+        case 'number':
+            widget = new FromToWidget(NumberWidget)
+            break;
+        case 'date':
+            widget = new FromToWidget(DateWidget)
+            break;
+        case 'id':
+            widget = new IDWidget(attribute as IdentityAttribute)
+            break;
+        case 'enum':
+            widget = new EnumWidget(attribute as EnumAttribute)
+            break;
+        case 'pointer':
+            widget = new PointerWidget(attribute as PointerAttribute)
+            break;
+        default://text
+            //regex
+            widget = new TextFilterWidget()
             break;
     }
     return widget

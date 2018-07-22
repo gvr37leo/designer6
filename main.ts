@@ -57,7 +57,7 @@ var appdef = new AppDef([
     new NumberAttribute('11','salaris','3'),
 ])
 
-var designer = new Designer(document.querySelector('#main'), selfdef)
+var designer = new Designer(document.querySelector('#main'), appdef)
 designer.navbar.element.appendChild(new Button('generate','btn-info',generateAppdef).element)
 
 

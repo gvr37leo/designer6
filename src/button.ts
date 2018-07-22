@@ -1,12 +1,16 @@
 class Button{
     element: HTMLButtonElement;
+    callback:() => void
 
     constructor(text:string,classes:string, callback:() => void){
+        this.callback = callback
         var template:string = `
             <button class="btn ${classes}" type="button">${text}</button>
         `
         this.element = string2html(template) as HTMLButtonElement
-        this.element.addEventListener('click', callback)
+        this.element.addEventListener('click', () => {
+            this.callback()
+        })
     }
 }
 
