@@ -110,7 +110,7 @@ function start(){
             }
             collection.find(query.filter).sort(query.sort).skip(query.paging.skip).limit(query.paging.limit).toArray(function(err, result){
                 var reffefObjects:{[k:string]:{[s:string]:any}} = {}
-                var reffedObjectsIdHolder:Map<string,string[]> = new Map()
+                var reffedObjectsIdHolder:Map<string,Set<string>> = new Map()
 
                 var queryResult:QueryResult = {
                     data:result,
@@ -121,20 +121,27 @@ function start(){
                         }
                     }
                 }
+                var uniqueCollections = new Set(query.reffedAttributes.map(ref => ref.collection))
 
-                for(var attribute of query.reffedAttributes){// only for unique collections
-                    reffefObjects[attribute.collection] = {}
-                    reffedObjectsIdHolder[attribute.collection] = []
+                for(var coll of uniqueCollections){// only for unique collections
+                    reffefObjects[coll] = {}
+                    reffedObjectsIdHolder.set(coll,new Set())
                 }
 
                 for(var obj of result){
                     for(var attribute of query.reffedAttributes){
                         var id = obj[attribute.attribute]
-                        reffedObjectsIdHolder.get(attribute.collection).push(id)//should be a set of ids
+                        reffedObjectsIdHolder.get(attribute.collection).add(id)
                     }
                 }
+                var promises:Promise<any>[] = []
+                for(var collidsetpair of reffedObjectsIdHolder.entries()){
+                    var colle = collidsetpair[0]
+                    var ids = Array.from(collidsetpair[1].values())
+                    promises.push(db.collection(colle).find({_id:{$in:ids}}).toArray())
+                }
+                //loop through maps and sets
 
-                //loop through set
 
 
                 collection.countDocuments({}).then((count) => {
