@@ -101,6 +101,50 @@ function start(){
         app.all('/*', function(req, res, next) {
             res.sendFile(path.resolve('index.html'));
         });
+
+        app.post('/api/refsearch/:object', function(req, res){
+            var collection = db.collection(req.params.object)
+            var query:Query = req.body;
+            if(query.filter._id){
+                query.filter._id = new mongodb.ObjectID(query.filter._id)
+            }
+            collection.find(query.filter).sort(query.sort).skip(query.paging.skip).limit(query.paging.limit).toArray(function(err, result){
+                var reffefObjects:{[k:string]:{[s:string]:any}} = {}
+                var reffedObjectsIdHolder:Map<string,string[]> = new Map()
+
+                var queryResult:QueryResult = {
+                    data:result,
+                    collectionSize:0,
+                    reffedObjects:{
+                        persoon:{
+                            'a2fgh13bg21sd':{}
+                        }
+                    }
+                }
+
+                for(var attribute of query.reffedAttributes){// only for unique collections
+                    reffefObjects[attribute.collection] = {}
+                    reffedObjectsIdHolder[attribute.collection] = []
+                }
+
+                for(var obj of result){
+                    for(var attribute of query.reffedAttributes){
+                        var id = obj[attribute.attribute]
+                        reffedObjectsIdHolder.get(attribute.collection).push(id)//should be a set of ids
+                    }
+                }
+
+                //loop through set
+
+
+                collection.countDocuments({}).then((count) => {
+                    res.send({
+                        data:result,
+                        collectionSize:count
+                    });
+                })
+            })
+        })
     });
 }
 
@@ -108,9 +152,19 @@ app.listen(port, function(){
     console.log('listening on ' + port)
 })
 
+declare class QueryResult{
+    data:any[]
+    collectionSize:number
+    reffedObjects:{[k:string]:{[s:string]:any}}
+}
+
 declare class Query{
     filter:any
     sort:any
+    reffedAttributes:{
+        attribute:string,
+        collection:string
+    }[]
     paging:{
         skip:number,
         limit:number
