@@ -98,9 +98,6 @@ function start(){
             })
         })
     
-        app.all('/*', function(req, res, next) {
-            res.sendFile(path.resolve('index.html'));
-        });
 
         app.post('/api/refsearch/:object', function(req, res){
             var collection = db.collection(req.params.object)
@@ -123,7 +120,7 @@ function start(){
                 }
                 var uniqueCollections = new Set(query.reffedAttributes.map(ref => ref.collection))
 
-                for(var coll of uniqueCollections){// only for unique collections
+                for(var coll of Array.from(uniqueCollections)){// only for unique collections
                     reffefObjects[coll] = {}
                     reffedObjectsIdHolder.set(coll,new Set())
                 }
@@ -131,27 +128,43 @@ function start(){
                 for(var obj of result){
                     for(var attribute of query.reffedAttributes){
                         var id = obj[attribute.attribute]
+                        if(id == null){
+                            continue;
+                        }
                         reffedObjectsIdHolder.get(attribute.collection).add(id)
                     }
                 }
                 var promises:Promise<any>[] = []
-                for(var collidsetpair of reffedObjectsIdHolder.entries()){
+                for(var collidsetpair of Array.from(reffedObjectsIdHolder)){
                     var colle = collidsetpair[0]
                     var ids = Array.from(collidsetpair[1].values())
                     promises.push(db.collection(colle).find({_id:{$in:ids}}).toArray())
                 }
-                //loop through maps and sets
 
+                Promise.all(promises).then(foundObjectsFromCollection => {
 
+                    for(var coll3 of foundObjectsFromCollection){
+                        var collectionname = ''
+                        for(var obj of coll3){
+                            reffefObjects[collectionname][obj._id] = obj
+                        }
+                    }
 
-                collection.countDocuments({}).then((count) => {
-                    res.send({
-                        data:result,
-                        collectionSize:count
-                    });
+                    collection.countDocuments({}).then((count) => {
+                        res.send({
+                            data:result,
+                            collectionSize:count,
+                            reffedObjects:reffefObjects
+                        });
+                    })
                 })
             })
         })
+
+        
+        app.all('/*', function(req, res, next) {
+            res.sendFile(path.resolve('index.html'));
+        });
     });
 }
 
