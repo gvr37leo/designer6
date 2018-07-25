@@ -138,8 +138,10 @@ class DetailView{
                 gridview.onCreateViewInstantiated.listen(createView => {
                     createView.widgetmap.get(referencedAttribute._id).value.set(this.data._id)
                 })
-                gridview.sync()
-                return gridview.element
+                gridview.sync().then(() => {
+                    this.tabs.viewcontainer.innerHTML = ''
+                    this.tabs.viewcontainer.appendChild(gridview.element)
+                })
             })
             
         }

@@ -39,7 +39,7 @@ class Tabs{
 
     selectTab(id:string){
         if(this.tabmap.has(id)){
-            this.render(this.tabmap.get(id)())
+            this.tabmap.get(id)()
             var button = this.tabbuttonMap.get(id)
             if(this.currentTabButton){
                 this.currentTabButton.classList.remove('active')
@@ -47,10 +47,5 @@ class Tabs{
             this.currentTabButton = button
             button.classList.add('active')
         }
-    }
-
-    render(element:HTMLElement){
-        this.viewcontainer.innerHTML = ''
-        this.viewcontainer.appendChild(element)
     }
 }

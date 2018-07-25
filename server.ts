@@ -127,7 +127,8 @@ function start(){
                     reffedObjectsIdHolder.set(collection,new Set())
                 }
 
-                //ga attributen van objecten langs en voeg ze toe aan de bijbehorende sets
+                //ga attributen van objecten langs en voeg de ids toe aan de bijbehorende sets
+                //deze loop kan erg lang zijn als er veel objecten zijn gevonden in de query
                 for(var obj of result){
                     for(var attribute of query.reffedAttributes){
                         var id = obj[attribute.attribute]
