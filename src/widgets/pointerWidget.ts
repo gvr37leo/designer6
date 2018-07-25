@@ -76,10 +76,13 @@ class PointerWidget extends Widget<string>{
                     }
                 })
             }
-            
         })
         
         this.sync()
+    }
+
+    setOfflineDisplay(obj){
+
     }
 
     sync(){

@@ -7,7 +7,7 @@ class Tabs{
     element: HTMLElement;
     tabcontainer: HTMLElement;
     viewcontainer: HTMLElement;
-    tabmap: Map<string, () => HTMLElement>;
+    tabmap: Map<string, () => void>;
     private tabbuttonMap:Map<string,HTMLElement>
     private currentTabButton:HTMLElement
 
@@ -27,7 +27,7 @@ class Tabs{
         this.tabbuttonMap = new Map()
     }
 
-    addTab(id:string,text:string, renderer:() => HTMLElement){
+    addTab(id:string,text:string, renderer:() => void){
         this.tabmap.set(id,renderer)
         var button = new Button(text,'btn-primary', () => {
             this.selectTab(id)
