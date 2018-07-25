@@ -100,12 +100,12 @@ function start(){
     
 
         app.post('/api/refsearch/:object', function(req, res){
-            var collection = db.collection(req.params.object)
+            var maincollection = db.collection(req.params.object)
             var query:Query = req.body;
             if(query.filter._id){
                 query.filter._id = new mongodb.ObjectID(query.filter._id)
             }
-            collection.find(query.filter).sort(query.sort).skip(query.paging.skip).limit(query.paging.limit).toArray(function(err, result){
+            maincollection.find(query.filter).sort(query.sort).skip(query.paging.skip).limit(query.paging.limit).toArray(function(err, result){
                 var reffefObjects:{[k:string]:{[s:string]:any}} = {}
                 var reffedObjectsIdHolder:Map<string,Set<string>> = new Map()
 
@@ -118,13 +118,16 @@ function start(){
                         }
                     }
                 }
+                //unieke sets
                 var uniqueCollections = new Set(query.reffedAttributes.map(ref => ref.collection))
 
-                for(var coll of Array.from(uniqueCollections)){// only for unique collections
-                    reffefObjects[coll] = {}
-                    reffedObjectsIdHolder.set(coll,new Set())
+                //initialiseer collections
+                for(let collection of Array.from(uniqueCollections)){// only for unique collections
+                    reffefObjects[collection] = {}
+                    reffedObjectsIdHolder.set(collection,new Set())
                 }
 
+                //ga attributen van objecten langs en voeg ze toe aan de bijbehorende sets
                 for(var obj of result){
                     for(var attribute of query.reffedAttributes){
                         var id = obj[attribute.attribute]
@@ -134,23 +137,27 @@ function start(){
                         reffedObjectsIdHolder.get(attribute.collection).add(id)
                     }
                 }
+                
+                //haal de objecten op van de gevraagde ids
                 var promises:Promise<any>[] = []
-                for(var collidsetpair of Array.from(reffedObjectsIdHolder)){
-                    var colle = collidsetpair[0]
-                    var ids = Array.from(collidsetpair[1].values())
-                    promises.push(db.collection(colle).find({_id:{$in:ids}}).toArray())
+                var collectionSets = Array.from(reffedObjectsIdHolder)
+                for(let collectionSet of collectionSets){
+                    let collection = collectionSet[0]
+                    let ids = Array.from(collectionSet[1].values()).map(id => new mongodb.ObjectID(id))
+                    promises.push(db.collection(collection).find({_id:{$in:ids}}).toArray())
                 }
 
+                //zet de objecten op het return object
                 Promise.all(promises).then(foundObjectsFromCollection => {
-
-                    for(var coll3 of foundObjectsFromCollection){
-                        var collectionname = ''
-                        for(var obj of coll3){
+                    for(var i = 0; i < foundObjectsFromCollection.length; i++){
+                        var collectionResult = foundObjectsFromCollection[i]
+                        var collectionname = collectionSets[i][0]
+                        for(var obj of collectionResult){
                             reffefObjects[collectionname][obj._id] = obj
                         }
                     }
 
-                    collection.countDocuments({}).then((count) => {
+                    maincollection.countDocuments({}).then((count) => {
                         res.send({
                             data:result,
                             collectionSize:count,
