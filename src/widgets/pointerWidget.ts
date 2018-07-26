@@ -7,6 +7,7 @@ class PointerWidget extends Widget<string>{
     filter:Query
     reffedObject: ObjDef;
     dropdownattribute: Attribute;
+    private offlineMode: boolean;
 
     constructor(attribute:PointerAttribute){
         super()
@@ -68,21 +69,27 @@ class PointerWidget extends Widget<string>{
             if(val == null){
                 this.dropdownwidget.input.value = 'null'
             }else{
-                get(this.reffedObject.name,this.value.get()).then(data => {
-                    if(data == null){
-                        this.dropdownwidget.input.value = 'nullptr'
-                    }else{
-                        this.dropdownwidget.value.set(data)
-                    }
-                })
+                if(!this.offlineMode){
+                    get(this.reffedObject.name,this.value.get()).then(data => {
+                        if(data == null){
+                            this.dropdownwidget.input.value = 'nullptr'
+                        }else{
+                            this.dropdownwidget.value.set(data)
+                        }
+                    })
+                }
             }
         })
         
-        this.sync()
+        //maybe call setofflinedisplay from here
+        this.setOfflineDisplay(null,prefetchedCollections.get(attribute))
     }
 
-    setOfflineDisplay(obj){
-
+    setOfflineDisplay(selectedValue:any,unfilteredoptions:any[]){
+        this.offlineMode = true
+        this.dropdownwidget.value.set(selectedValue)
+        this.offlineMode = false
+        this.dropdownwidget.loadOptions(unfilteredoptions)
     }
 
     sync(){

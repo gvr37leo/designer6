@@ -16,6 +16,7 @@ interface Window{
     globalModal:Modal
 }
 
+var prefetchedCollections = new Map<string,any[]>()
 
 class Designer{
 
@@ -72,10 +73,29 @@ class Designer{
             this.viewcontainer.appendChild(detailview.element)
         })
 
-        this.router.trigger(window.location.pathname)
+        this.preloadCollections(10).then(() => {
+            this.router.trigger(window.location.pathname)
+        })
 
         window.addEventListener('popstate',(event) => {
             this.router.trigger(window.location.pathname)
         })
+    }
+
+    preloadCollections(limit:number){
+        var promises:Promise<void>[] = []
+        for(let object of this.appDef.objdefinitions){
+            promises.push(getList(object.name,{
+                filter:{},
+                paging:{
+                    skip: 0,
+                    limit: limit
+                },
+                sort:{}
+            }).then(res => {
+                prefetchedCollections.set(object.name,res.data)
+            })) 
+        }
+        return Promise.all(promises)
     }
 }
