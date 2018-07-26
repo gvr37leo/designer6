@@ -10,13 +10,10 @@
 // pointerfilters
 // caching of andere manier om ajax overhead te weren
 
-interface Window{
-    objidmap:Map<string,ObjDef>
-    attributeidmap:Map<string,Attribute>
-    globalModal:Modal
-}
-
-var prefetchedCollections = new Map<string,any[]>()
+var globalModal:Modal
+var objidmap = new Map<string,ObjDef>()
+var attributeidmap = new Map<string,Attribute>()
+var prefetchedCollections = new Map<string,any[]>() 
 
 class Designer{
 
@@ -37,9 +34,9 @@ class Designer{
     constructor(anchor:HTMLElement,appDef:AppDef){
         this.appDef = addImplicitRefs(appDef)
         var objnamemap = array2map(this.appDef.objdefinitions, obj => obj.name)
-        window.objidmap = array2map(this.appDef.objdefinitions, obj => obj._id)
-        window.attributeidmap = array2map(this.appDef.attributes, obj => obj._id)
-        window.globalModal = new Modal()
+        objidmap = array2map(this.appDef.objdefinitions, obj => obj._id)
+        attributeidmap = array2map(this.appDef.attributes, obj => obj._id)
+        globalModal = new Modal()
 
         this.htmlElement = createAndAppend(anchor,this.template)
         this.navbarElement = this.htmlElement.querySelector('#navbar')
@@ -73,29 +70,30 @@ class Designer{
             this.viewcontainer.appendChild(detailview.element)
         })
 
-        this.preloadCollections(10).then(() => {
-            this.router.trigger(window.location.pathname)
-        })
+        this.preloadCollections(10).then(() => { 
+            this.router.trigger(window.location.pathname) 
+        }) 
 
         window.addEventListener('popstate',(event) => {
             this.router.trigger(window.location.pathname)
         })
     }
 
-    preloadCollections(limit:number){
-        var promises:Promise<void>[] = []
-        for(let object of this.appDef.objdefinitions){
-            promises.push(getList(object.name,{
-                filter:{},
-                paging:{
-                    skip: 0,
-                    limit: limit
-                },
-                sort:{}
-            }).then(res => {
-                prefetchedCollections.set(object.name,res.data)
-            })) 
-        }
-        return Promise.all(promises)
-    }
+    preloadCollections(limit:number){ 
+        var promises:Promise<void>[] = [] 
+        for(let object of this.appDef.objdefinitions){ 
+            promises.push(getRefList(object.name,{ 
+                filter:{}, 
+                paging:{ 
+                    skip: 0, 
+                    limit: limit 
+                }, 
+                sort:{},
+                reffedAttributes:[]
+            }).then(res => { 
+                prefetchedCollections.set(object.name,res.data) 
+            }))  
+        } 
+        return Promise.all(promises) 
+    } 
 }

@@ -20,8 +20,8 @@ class PointerWidget extends Widget<string>{
             sort:{},
         }
         this.attribute = attribute
-        this.reffedObject = window.objidmap.get(attribute.pointsToObject)
-        this.dropdownattribute = window.attributeidmap.get(this.reffedObject.dropdownAttributePointer)
+        this.reffedObject = objidmap.get(attribute.pointsToObject)
+        this.dropdownattribute = attributeidmap.get(this.reffedObject.dropdownAttributePointer)
 
         this.element = string2html(`
         <div class="d-flex">
@@ -48,11 +48,11 @@ class PointerWidget extends Widget<string>{
 
         this.createbutton = new Button('create','btn-success attachright',() => {
             var createview = new DetailView(this.reffedObject).renderCreateView()
-            window.globalModal.set(createview.element)
-            window.globalModal.show()
+            globalModal.set(createview.element)
+            globalModal.show()
             createview.onObjectCreated.listen((insertedId) => {
                 this.value.set(insertedId)
-                window.globalModal.hide()
+                globalModal.hide()
             })
         })
         this.element.appendChild(this.createbutton.element)
@@ -82,7 +82,7 @@ class PointerWidget extends Widget<string>{
         })
         
         //maybe call setofflinedisplay from here
-        this.setOfflineDisplay(null,prefetchedCollections.get(attribute))
+        this.setOfflineDisplay(df,prefetchedCollections.get(objidmap.get(attribute.pointsToObject).name))
     }
 
     setOfflineDisplay(selectedValue:any,unfilteredoptions:any[]){

@@ -130,7 +130,7 @@ class DetailView{
 
     addTablesToTabs(objdef:ObjDef,id:string){
         for(let referencedAttribute of objdef.referencedAttributes){
-            let ownerOfReferencedAttribute:ObjDef = window.objidmap.get(referencedAttribute.belongsToObject)
+            let ownerOfReferencedAttribute:ObjDef = objidmap.get(referencedAttribute.belongsToObject)
             
             this.tabs.addTab(referencedAttribute._id,`${ownerOfReferencedAttribute.name} : ${referencedAttribute.name}`, () => {
                 var gridview = new GridView(ownerOfReferencedAttribute)

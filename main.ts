@@ -2,13 +2,14 @@
 /// <reference path="src/views/table.ts" />
 
 function generateAppdef(){
-    var query = {
+    var query:Query = {
         filter:{},
         paging:{
             limit:0,
             skip:0
         },
-        sort:{}
+        sort:{},
+        reffedAttributes:[],
     }
     Promise.all([getList<any>('object',query),getList<any>('attribute',query)]).then(res => {
         var objects = res[0].data

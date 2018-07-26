@@ -19,13 +19,28 @@ class GridView{
 
     constructor(obj:ObjDef){
         this.objdef = obj
-        this.query = {
+        var reffedAttributes:{
+            attribute:string,
+            collection:string
+        }[] = []
+
+        for(var attribute of obj.attributes){
+            if(attribute.dataType == DataType.pointer){
+                reffedAttributes.push({
+                    attribute:attribute.name,
+                    collection:objidmap.get(attribute.belongsToObject).name
+                })
+            }
+        }
+
+        this.query = { 
             filter:{},
             sort:{},
             paging:{
                 skip:0,
                 limit:10
-            }
+            },
+            reffedAttributes:reffedAttributes
         }
         this.element = string2html(`
         <div class="">
@@ -40,10 +55,10 @@ class GridView{
             var createDetailview = new DetailView(obj)
             createDetailview.renderCreateView()
             this.onCreateViewInstantiated.trigger(createDetailview)
-            window.globalModal.set(createDetailview.element)
-            window.globalModal.show()
+            globalModal.set(createDetailview.element)
+            globalModal.show()
             createDetailview.onObjectCreated.listen(createdId => {
-                window.globalModal.hide()
+                globalModal.hide()
                 this.sync()
             })
         }))
@@ -98,7 +113,7 @@ class GridView{
 
                 return element
             },() => {
-
+                // offline load pointerwidget maybe
                 var widget = createFilterWidget(attribute)
                 this.filterwidgetmap.set(attribute._id,widget)
                 let changeTriggeredByUser = true;
@@ -156,9 +171,10 @@ class GridView{
     }
 
     sync():Promise<any>{
-        return getList(this.objdef.name, this.query).then(res => {
+        return getRefList(this.objdef.name,this.query).then(res => {
             this.dirtiedEvents = res.data.map(v => new EventSystem())
             this.table.load(res.data)
+            //maybe offlineload pointerwidgets here
             var max = Math.floor(res.collectionSize / this.query.paging.limit)
             this.skipwidget.inputel.max = max.toString()
             this.skipwidget.inputel.disabled = !max

@@ -12,11 +12,21 @@ function create(objname:string, data:any):Promise<PostResponse>{
 }
 
 function get(objname:string, id:string):Promise<any>{
-    return getList(objname,{filter:{_id:id},sort:undefined,paging:{skip:0,limit:10}}).then(val => val.data[0])
+    return getList(objname,{filter:{_id:id},sort:{},reffedAttributes:[],paging:{skip:0,limit:10}}).then(val => val.data[0])
 }
 
-function getList<T>(objname:string, query:Query):Promise<SearchResponse<T>>{
+function getList<T>(objname:string, query:Query):Promise<QueryResult<T>>{
     return httpCall(`/api/search/${objname}`, {
+        headers:{
+            'Content-Type': 'application/json'
+        },
+        method:'POST',
+        body:JSON.stringify(query)
+    })
+}
+
+function getRefList<T>(objname:string, query:Query):Promise<QueryResult<T>>{
+    return httpCall(`api/refsearch/${objname}`, {
         headers:{
             'Content-Type': 'application/json'
         },
@@ -53,15 +63,20 @@ function httpCall(url,params){
 declare class Query{
     filter:any
     sort:any
+    reffedAttributes:{
+        attribute:string,
+        collection:string
+    }[]
     paging:{
         skip:number,
         limit:number
     }
 }
 
-declare class SearchResponse<T>{
+declare class QueryResult<T>{
     data:T[]
     collectionSize:number
+    reffedObjects:{[k:string]:{[s:string]:any}}
 }
 
 declare class PostResponse{

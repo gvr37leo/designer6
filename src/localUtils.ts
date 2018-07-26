@@ -25,7 +25,7 @@ function addImplicitRefs(appdef: AppDef): AppDef{
     for(var attribute of appdef.attributes){
         objmap.get(attribute.belongsToObject).attributes.push(attribute)
 
-        if(attribute.dataType == 'pointer'){
+        if(attribute.dataType == DataType.pointer){
             var referencedObject = objmap.get((attribute as PointerAttribute).pointsToObject)
             referencedObject.referencedAttributes.push(attribute as PointerAttribute)
         }
@@ -37,22 +37,25 @@ function addImplicitRefs(appdef: AppDef): AppDef{
 function createWidget(attribute:Attribute):Widget<any>{
     var widget:Widget<any>
     switch (attribute.dataType) {
-        case 'boolean':
+        case DataType.boolean:
             widget = new BooleanWidget()
             break;
-        case 'number':
+        case DataType.number:
             widget = new NumberWidget()
             break;
-        case 'date':
+        case DataType.range:
+            widget = new RangeWidget()
+            break;
+        case DataType.date:
             widget = new DateWidget()
             break;
-        case 'id':
+        case DataType.id:
             widget = new IDWidget(attribute as IdentityAttribute)
             break;
-        case 'enum':
+        case DataType.enum:
             widget = new EnumWidget(attribute as EnumAttribute)
             break;
-        case 'pointer':
+        case DataType.pointer:
             widget = new PointerWidget(attribute as PointerAttribute)
             break;
         default://text
@@ -65,22 +68,25 @@ function createWidget(attribute:Attribute):Widget<any>{
 function createFilterWidget(attribute:Attribute):Widget<any>{
     var widget:Widget<any>
     switch (attribute.dataType) {
-        case 'boolean':
+        case DataType.boolean:
             widget = new BooleanWidget()
             break;
-        case 'number':
+        case DataType.number:
             widget = new FromToWidget(NumberWidget)
             break;
-        case 'date':
+        case DataType.range:
+            widget = new FromToWidget(RangeWidget)
+            break;
+        case DataType.date:
             widget = new FromToWidget(DateWidget)
             break;
-        case 'id':
+        case DataType.id:
             widget = new IDWidget(attribute as IdentityAttribute)
             break;
-        case 'enum':
+        case DataType.enum:
             widget = new EnumWidget(attribute as EnumAttribute)
             break;
-        case 'pointer':
+        case DataType.pointer:
             widget = new PointerWidget(attribute as PointerAttribute)
             break;
         default://text
