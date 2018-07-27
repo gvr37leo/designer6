@@ -18,6 +18,7 @@ class PointerWidget extends Widget<string>{
                 skip:0
             },
             sort:{},
+            reffedAttributes:[]
         }
         this.attribute = attribute
         this.reffedObject = objidmap.get(attribute.pointsToObject)
