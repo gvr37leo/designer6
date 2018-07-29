@@ -16,22 +16,10 @@ class GridView{
     filterwidgetmap: Map<string, Widget<any>> = new Map();
     sortwidgetmap: Map<string, Widget<any>> = new Map();
     onCreateViewInstantiated:EventSystem<DetailView> = new EventSystem()
+    reffedObjects: { [k: string]: { [s: string]: any; }; };
 
     constructor(obj:ObjDef){
         this.objdef = obj
-        var reffedAttributes:{
-            attribute:string,
-            collection:string
-        }[] = []
-
-        for(var attribute of obj.attributes){
-            if(attribute.dataType == DataType.pointer){
-                reffedAttributes.push({
-                    attribute:attribute.name,
-                    collection:objidmap.get(attribute.belongsToObject).name
-                })
-            }
-        }
 
         this.query = { 
             filter:{},
@@ -40,7 +28,7 @@ class GridView{
                 skip:0,
                 limit:10
             },
-            reffedAttributes:reffedAttributes
+            reffedAttributes:obj.genReffedAttributes()
         }
         this.element = string2html(`
         <div class="">
@@ -113,8 +101,12 @@ class GridView{
 
                 return element
             },() => {
-                // offline load pointerwidget maybe
                 var widget = createFilterWidget(attribute)
+
+                if(attribute.dataType == DataType.pointer){
+                    (widget as PointerWidget).dropdownwidget.loadOptions(getPrefetchedCollection(attribute as PointerAttribute))
+                }
+
                 this.filterwidgetmap.set(attribute._id,widget)
                 let changeTriggeredByUser = true;
                 var clearablewidget = new ClearableWidget(widget)
@@ -136,8 +128,15 @@ class GridView{
                 })
                 return clearablewidget.element
             }],(obj, i) => {
+                // offline load pointerwidget maybe
                 var widget = createWidget(attribute)
-                widget.value.set(obj[attribute.name])
+                if(attribute.dataType == DataType.pointer){
+                    var result = getreffedCachedObject(obj,attribute,this.reffedObjects);
+                    (widget as PointerWidget).setOfflineDisplay(result.object , result.list)
+                }else{
+                    widget.value.set(obj[attribute.name])
+                }
+                
                 widget.value.onchange.listen(val => {
                     obj[attribute.name] = val
                     this.dirtiedEvents[i].trigger(0)
@@ -171,8 +170,10 @@ class GridView{
     }
 
     sync():Promise<any>{
-        return getRefList(this.objdef.name,this.query).then(res => {
+        return getList(this.objdef.name,this.query).then(res => {
             this.dirtiedEvents = res.data.map(v => new EventSystem())
+            this.reffedObjects = res.reffedObjects;
+            
             this.table.load(res.data)
             //maybe offlineload pointerwidgets here
             var max = Math.floor(res.collectionSize / this.query.paging.limit)

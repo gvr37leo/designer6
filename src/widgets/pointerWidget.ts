@@ -71,7 +71,8 @@ class PointerWidget extends Widget<string>{
                 this.dropdownwidget.input.value = 'null'
             }else{
                 if(!this.offlineMode){
-                    get(this.reffedObject.name,this.value.get()).then(data => {
+                    get(this.reffedObject,this.value.get()).then(res => {
+                        var data = res.data[0]
                         if(data == null){
                             this.dropdownwidget.input.value = 'nullptr'
                         }else{
@@ -83,7 +84,7 @@ class PointerWidget extends Widget<string>{
         })
         
         //maybe call setofflinedisplay from here
-        this.setOfflineDisplay(df,prefetchedCollections.get(objidmap.get(attribute.pointsToObject).name))
+        // this.setOfflineDisplay(df,prefetchedCollections.get(objidmap.get(attribute.pointsToObject).name))
     }
 
     setOfflineDisplay(selectedValue:any,unfilteredoptions:any[]){

@@ -11,22 +11,24 @@ function create(objname:string, data:any):Promise<PostResponse>{
     })
 }
 
-function get(objname:string, id:string):Promise<any>{
-    return getList(objname,{filter:{_id:id},sort:{},reffedAttributes:[],paging:{skip:0,limit:10}}).then(val => val.data[0])
-}
 
-function getList<T>(objname:string, query:Query):Promise<QueryResult<T>>{
-    return httpCall(`/api/search/${objname}`, {
-        headers:{
-            'Content-Type': 'application/json'
+function get(objdef:ObjDef, id:string){
+    objdef.attributes
+    return getList(objdef.name,{
+        filter:{
+            _id:id,
         },
-        method:'POST',
-        body:JSON.stringify(query)
+        paging:{
+            limit:0,
+            skip:0,
+        },
+        sort:{},
+        reffedAttributes:objdef.genReffedAttributes()
     })
 }
 
-function getRefList<T>(objname:string, query:Query):Promise<QueryResult<T>>{
-    return httpCall(`api/refsearch/${objname}`, {
+function getList<T>(objname:string, query:Query):Promise<QueryResult<T>>{
+    return httpCall(`/api/refsearch/${objname}`, {
         headers:{
             'Content-Type': 'application/json'
         },
@@ -60,17 +62,21 @@ function httpCall(url,params){
     return promise
 }
 
+declare class AttributeReference{
+    attribute:string
+    collection:string
+}
+
 declare class Query{
     filter:any
     sort:any
-    reffedAttributes:{
-        attribute:string,
-        collection:string
-    }[]
-    paging:{
-        skip:number,
-        limit:number
-    }
+    reffedAttributes:AttributeReference[]
+    paging:Paging
+}
+
+declare class Paging{
+    skip:number
+    limit:number
 }
 
 declare class QueryResult<T>{

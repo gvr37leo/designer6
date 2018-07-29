@@ -26,6 +26,19 @@ class ObjDef{
         this.name = name
         this.dropdownAttributePointer = dropdownAttributePointer
     }
+
+    genReffedAttributes():AttributeReference[]{
+        var reffedAttributes:AttributeReference[] = []
+        for(var attribute of this.attributes){
+            if(attribute.dataType == DataType.pointer){
+                reffedAttributes.push({
+                    attribute:attribute.name,
+                    collection:objidmap.get(attribute.belongsToObject).name
+                })
+            }
+        }
+        return reffedAttributes
+    }
 }
 
 class Attribute{

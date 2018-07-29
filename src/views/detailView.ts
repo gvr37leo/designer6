@@ -91,11 +91,11 @@ class DetailView{
             this.tabs.selectTab(this.objdef.referencedAttributes[0]._id)
         }
 
-        get(this.objdef.name,id).then(val => {
+        get(this.objdef,id).then(val => {
             if(val == null){
                 //nullptr 404
             }else{
-                this.load(val)
+                this.loadCached(val)
                 for(var widget of this.widgetmap.values()){
                     widget.value.onchange.listen(() => {
                         this.dirtiedEvent.trigger(0)
@@ -152,15 +152,30 @@ class DetailView{
     }
 
     refresh(id){
-        return get(this.objdef.name,id).then(data => this.load(data)) 
+        return get(this.objdef,id).then(data => this.loadCached(data)) 
     }
 
-    load(data:any){
+    load(data:QueryResult<any>){
         this.data = data
         var attributes = getAllAttributes(this.objdef)
         for(var attribute of attributes){
             var widget = this.widgetmap.get(attribute._id)
             widget.value.set(this.data[attribute.name])
+        }
+    }
+
+    loadCached(res:QueryResult<any>){
+        var data = res.data[0]
+        var attributes = getAllAttributes(this.objdef)
+        for(var attribute of attributes){
+            var widget = this.widgetmap.get(attribute._id)
+
+            if(attribute.dataType == DataType.pointer){
+                var result = getreffedCachedObject(data,attribute,res.reffedObjects);
+                (widget as PointerWidget).setOfflineDisplay(result.object , result.list)
+            }else{
+                widget.value.set(data[attribute.name])
+            }
         }
     }
 

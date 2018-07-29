@@ -8,7 +8,7 @@
 /// <reference path="modal.ts" />
 
 // pointerfilters
-// caching of andere manier om ajax overhead te weren
+// naam pointers vervangen met id pointers
 
 var globalModal:Modal
 var objidmap = new Map<string,ObjDef>()
@@ -82,7 +82,7 @@ class Designer{
     preloadCollections(limit:number){ 
         var promises:Promise<void>[] = [] 
         for(let object of this.appDef.objdefinitions){ 
-            promises.push(getRefList(object.name,{ 
+            promises.push(getList(object.name,{ 
                 filter:{}, 
                 paging:{ 
                     skip: 0, 
