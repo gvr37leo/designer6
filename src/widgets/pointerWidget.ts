@@ -38,6 +38,9 @@ class PointerWidget extends Widget<string>{
         this.element.appendChild(gotoButton.element)
         
         this.dropdownwidget = new DropdownWidget<any>('attachleft',(val) => {
+            if(val == null){
+                return 'null'
+            }
             return val[this.dropdownattribute.name]
         })
         this.dropdowncontainer.appendChild(this.dropdownwidget.element)
@@ -64,7 +67,11 @@ class PointerWidget extends Widget<string>{
         })
 
         this.dropdownwidget.value.onchange.listen(val => {
-            this.value.set(val._id)
+            if(val == null){
+                this.value.set(null)
+            }else{
+                this.value.set(val._id)
+            }
         })
         this.value.onchange.listen(val => {
             if(val == null){
