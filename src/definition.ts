@@ -33,7 +33,7 @@ class ObjDef{
             if(attribute.dataType == DataType.pointer){
                 reffedAttributes.push({
                     attribute:attribute.name,
-                    collection:objidmap.get(attribute.belongsToObject).name,
+                    collection:objidmap.get((attribute as PointerAttribute).pointsToObject).name,
                     dereferences:[]
                 })
             }
