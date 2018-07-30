@@ -42,6 +42,7 @@ class GridView{
         this.addButton(new Button('create','btn-success attachleft',() => {
             var createDetailview = new DetailView(obj)
             createDetailview.renderCreateView()
+            
             this.onCreateViewInstantiated.trigger(createDetailview)
             globalModal.set(createDetailview.element)
             globalModal.show()
@@ -131,7 +132,7 @@ class GridView{
                 // offline load pointerwidget maybe
                 var widget = createWidget(attribute)
                 if(attribute.dataType == DataType.pointer){
-                    var result = getreffedCachedObject(obj,attribute,this.reffedObjects);
+                    var result = getreffedCachedObject(obj,attribute as PointerAttribute,this.reffedObjects);
                     (widget as PointerWidget).setOfflineDisplay(result.object , result.list)
                 }else{
                     widget.value.set(obj[attribute.name])

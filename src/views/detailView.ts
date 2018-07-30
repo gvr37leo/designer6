@@ -55,6 +55,8 @@ class DetailView{
             window.location.pathname = `/${this.objdef.name}`
         }))
 
+        this.preloadPointerWidgetOptions()
+
         return this
     }
 
@@ -171,7 +173,7 @@ class DetailView{
             var widget = this.widgetmap.get(attribute._id)
 
             if(attribute.dataType == DataType.pointer){
-                var result = getreffedCachedObject(data,attribute,res.reffedObjects);
+                var result = getreffedCachedObject(data,attribute as PointerAttribute,res.reffedObjects);
                 (widget as PointerWidget).setOfflineDisplay(result.object , result.list)
             }else{
                 widget.value.set(data[attribute.name])
@@ -179,4 +181,13 @@ class DetailView{
         }
     }
 
+    preloadPointerWidgetOptions(){
+        var attributes = getAllAttributes(this.objdef)
+        attributes
+            .filter(attr => attr.dataType == DataType.pointer)
+            .map(attr => this.widgetmap.get(attr._id))
+            .forEach(widget  => {
+                (widget as PointerWidget).dropdownwidget.loadOptions(getPrefetchedCollection((widget as PointerWidget).attribute))
+            })
+    }
 }

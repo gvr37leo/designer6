@@ -134,27 +134,22 @@ function download(filename, text) {
     document.body.removeChild(element);
 }
 
-function derefPointerAttribute(attribute:PointerAttribute):ObjDef{
-    return objidmap.get((attribute as PointerAttribute).pointsToObject);
-}
-
-function getReffedObject(obj,reffedObjects,objdef:ObjDef,attribute:PointerAttribute){
+function indexReffedObjectFromPointerInObject(obj:any,attribute:Attribute,reffedObjects,objdef:ObjDef){
     var objpointer = obj[attribute.name];
     return reffedObjects[objdef.name][objpointer];
 }
 
-function getreffedCachedObject(obj:any,attribute:Attribute,reffedObjects){
-    var collection = objidmap.get((attribute as PointerAttribute).pointsToObject);
-    var objpointer = obj[attribute.name];
-    var object = reffedObjects[collection.name][objpointer];
-    var list = prefetchedCollections.get(collection.name)
+function getPrefetchedCollection(attribute:PointerAttribute):any[]{
+    var collection = objidmap.get(attribute.pointsToObject);
+    return prefetchedCollections.get(collection.name)
+}
+
+function getreffedCachedObject(obj:any,attribute:PointerAttribute,reffedObjects){
+    var objdef = objidmap.get(attribute.pointsToObject);
+    var object = indexReffedObjectFromPointerInObject(obj,attribute,reffedObjects,objdef)
+    var list = prefetchedCollections.get(objdef.name)
     return {
         object,
         list
     }
-}
-
-function getPrefetchedCollection(attribute:PointerAttribute){
-    var collection = objidmap.get(attribute.pointsToObject);
-    return prefetchedCollections.get(collection.name)
 }
