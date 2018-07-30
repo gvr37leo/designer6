@@ -27,13 +27,14 @@ class ObjDef{
         this.dropdownAttributePointer = dropdownAttributePointer
     }
 
-    genReffedAttributes():AttributeReference[]{
-        var reffedAttributes:AttributeReference[] = []
+    genReffedAttributes():Dereference[]{
+        var reffedAttributes:Dereference[] = []
         for(var attribute of this.attributes){
             if(attribute.dataType == DataType.pointer){
                 reffedAttributes.push({
                     attribute:attribute.name,
-                    collection:objidmap.get(attribute.belongsToObject).name
+                    collection:objidmap.get(attribute.belongsToObject).name,
+                    dereferences:[]
                 })
             }
         }

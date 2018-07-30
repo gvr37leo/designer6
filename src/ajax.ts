@@ -62,30 +62,33 @@ function httpCall(url,params){
     return promise
 }
 
-declare class AttributeReference{
+
+type Dereference = {
     attribute:string
     collection:string
+    dereferences:Dereference[]
 }
 
-declare class Query{
+
+type Query = {
     filter:any
     sort:any
-    reffedAttributes:AttributeReference[]
+    reffedAttributes:Dereference[]
     paging:Paging
 }
 
-declare class Paging{
+type Paging = {
     skip:number
     limit:number
 }
 
-declare class QueryResult<T>{
+type QueryResult<T> = {
     data:T[]
     collectionSize:number
     reffedObjects:{[k:string]:{[s:string]:any}}
 }
 
-declare class PostResponse{
+type PostResponse = {
     status:string
     insertedId:string
 }

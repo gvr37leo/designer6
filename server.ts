@@ -180,21 +180,26 @@ app.listen(port, function(){
     console.log('listening on ' + port)
 })
 
-declare class QueryResult{
+type QueryResult = {
     data:any[]
     collectionSize:number
     reffedObjects:{[k:string]:{[s:string]:any}}
 }
 
-declare class Query{
+type Dereference = {
+    attribute:string
+    collection:string
+    dereferences:Dereference[]
+}
+
+type Query = {
     filter:any
     sort:any
-    reffedAttributes:{
-        attribute:string,
-        collection:string
-    }[]
-    paging:{
-        skip:number,
-        limit:number
-    }
+    reffedAttributes:Dereference[]
+    paging:Paging
+}
+
+type Paging = {
+    skip:number
+    limit:number
 }
