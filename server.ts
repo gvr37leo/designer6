@@ -1,3 +1,6 @@
+/// <reference path="src/ajaxDefinitionClasses.ts" />
+
+
 import * as express from "express";
 import * as bodyParser from "body-parser"
 import * as mongodb from "mongodb"
@@ -109,15 +112,6 @@ function start(){
                 var reffefObjects:{[k:string]:{[s:string]:any}} = {}
                 var reffedObjectsIdHolder:Map<string,Set<string>> = new Map()
 
-                var queryResult:QueryResult = {
-                    data:result,
-                    collectionSize:0,
-                    reffedObjects:{
-                        persoon:{
-                            'a2fgh13bg21sd':{}
-                        }
-                    }
-                }
                 //unieke sets
                 var uniqueCollections = new Set(query.reffedAttributes.map(ref => ref.collection))
 
@@ -179,27 +173,3 @@ function start(){
 app.listen(port, function(){
     console.log('listening on ' + port)
 })
-
-type QueryResult = {
-    data:any[]
-    collectionSize:number
-    reffedObjects:{[k:string]:{[s:string]:any}}
-}
-
-type Dereference = {
-    attribute:string
-    collection:string
-    dereferences:Dereference[]
-}
-
-type Query = {
-    filter:any
-    sort:any
-    reffedAttributes:Dereference[]
-    paging:Paging
-}
-
-type Paging = {
-    skip:number
-    limit:number
-}
