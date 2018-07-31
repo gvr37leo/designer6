@@ -30,7 +30,7 @@ var selfdef = new AppDef([
     new ObjDef('2','attribute','3'),
 ],[
     new TextAttribute('1','name','1'),
-    new PointerAttribute('2','dropdownAttribute','1','2'),
+    new PointerAttribute('2','dropdownAttribute','1','2','5'),
 
     new TextAttribute('3','name','2'),
     new EnumAttribute('4','dataType','2',['text','number','boolean','date','pointer']),
@@ -58,7 +58,7 @@ var appdef = new AppDef([
     new NumberAttribute('11','salaris','3'),
 ])
 
-var designer = new Designer(document.querySelector('#main'), appdef)
+var designer = new Designer(document.querySelector('#main'), selfdef)
 designer.navbar.element.appendChild(new Button('generate','btn-info',generateAppdef).element)
 
 

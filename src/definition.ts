@@ -122,13 +122,13 @@ class IdentityAttribute extends Attribute{
 
 class PointerAttribute extends Attribute{
     pointsToObject:string
-    filterOnColumn:string
+    filterOnAttribute:string
     usingOwnColumn:string
 
-    constructor(_id: string, name: string, belongsToObject: string, pointsToObject: string,filterOnColumn:string = null,usingOwnColumn:string = null){
+    constructor(_id: string, name: string, belongsToObject: string, pointsToObject: string,filterOnAttribute:string = null,usingOwnColumn:string = null){
         super(_id, name, belongsToObject, DataType.pointer)
         this.pointsToObject = pointsToObject
-        this.filterOnColumn = filterOnColumn
+        this.filterOnAttribute = filterOnAttribute
         this.usingOwnColumn = usingOwnColumn
     }
 }

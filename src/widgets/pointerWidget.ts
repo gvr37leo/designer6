@@ -102,6 +102,11 @@ class PointerWidget extends Widget<string>{
     }
 
     sync(){
+        if(this.attribute.filterOnAttribute){
+            var fonAttribute = attributeidmap.get(this.attribute.filterOnAttribute)
+            // get id of the object this pointer belongsto
+            // this.query.filter[fonAttribute.name] = '5b50c4c043d90e109cccfc75'
+        }
         return getList(this.reffedObject.name,this.query).then(data => {
             //faulty querys make getlist retun null and cause nullpointer exceptions
             this.dropdownwidget.loadOptions(data.data)
