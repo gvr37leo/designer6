@@ -4,14 +4,14 @@ class PointerWidget extends Widget<string>{
     attribute: PointerAttribute;
     createbutton: Button;
     dropdownwidget: DropdownWidget<any>;
-    filter:Query
+    query:Query
     reffedObject: ObjDef;
     dropdownattribute: Attribute;
     private offlineMode: boolean;
 
     constructor(attribute:PointerAttribute){
         super()
-        this.filter = {
+        this.query = {
             filter:{},
             paging:{
                 limit:10,
@@ -62,7 +62,7 @@ class PointerWidget extends Widget<string>{
         this.element.appendChild(this.createbutton.element)
       
         this.dropdownwidget.input.addEventListener('change', e => {
-            this.filter.filter[this.dropdownattribute.name] = {$regex:this.dropdownwidget.input.value}
+            this.query.filter[this.dropdownattribute.name] = {$regex:this.dropdownwidget.input.value}
             this.sync()
         })
 
@@ -102,7 +102,7 @@ class PointerWidget extends Widget<string>{
     }
 
     sync(){
-        return getList(this.reffedObject.name,this.filter).then(data => {
+        return getList(this.reffedObject.name,this.query).then(data => {
             //faulty querys make getlist retun null and cause nullpointer exceptions
             this.dropdownwidget.loadOptions(data.data)
         })
