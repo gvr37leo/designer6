@@ -44,7 +44,7 @@ class DetailView{
         this.onObjectCreated = new EventSystem()
         this.renderTemplate()
 
-        this.renderWidgets(this.objdef.attributes)
+        this.renderWidgets(this.objdef.attributes,null)
 
         this.addButton(new Button('create','btn-success', () => {
             create(this.objdef.name,this.data).then(val => {
@@ -66,7 +66,7 @@ class DetailView{
             this.tabs = new Tabs(this.tabscontainer)
         }
         this.dirtiedEvent = new EventSystem<number>()
-        this.renderWidgets(this.objdef.passiveAttributes.concat(this.objdef.attributes))
+        this.renderWidgets(this.objdef.passiveAttributes.concat(this.objdef.attributes), id)
 
         var savebutton = new DisableableButton('save','btn-success',this.dirtiedEvent,() => {
             update(this.objdef.name,id,this.data)
@@ -119,9 +119,9 @@ class DetailView{
         this.header.innerText = this.objdef.name
     }
 
-    renderWidgets(attributes:Attribute[]){
+    renderWidgets(attributes:Attribute[],selfid:string){
         for(let attribute of attributes){
-            var widget = createWidget(attribute)
+            var widget = createWidget(attribute,selfid)
             var field = createAndAppend(this.widgetcontainer,`<div class="field"><label>${attribute.name}</label><div id="valuecontainer"></div></div>`)
             var valuecontainer = field.querySelector('#valuecontainer')
             valuecontainer.appendChild(widget.element)
@@ -172,12 +172,12 @@ class DetailView{
         for(var attribute of attributes){
             var widget = this.widgetmap.get(attribute._id)
 
-            if(attribute.dataType == DataType.pointer){
-                var result = getreffedCachedObject(data,attribute as PointerAttribute,res.reffedObjects);
-                (widget as PointerWidget).setOfflineDisplay(result.object , result.list)
-            }else{
+            // if(attribute.dataType == DataType.pointer){
+            //     var result = getreffedCachedObject(data,attribute as PointerAttribute,res.reffedObjects);
+            //     (widget as PointerWidget).setOfflineDisplay(result.object , result.list)
+            // }else{
                 widget.value.set(data[attribute.name])
-            }
+            // }
         }
     }
 

@@ -34,7 +34,7 @@ function addImplicitRefs(appdef: AppDef): AppDef{
     return appdef
 }
 
-function createWidget(attribute:Attribute):Widget<any>{
+function createWidget(attribute:Attribute,selfid:string):Widget<any>{
     var widget:Widget<any>
     switch (attribute.dataType) {
         case DataType.boolean:
@@ -56,7 +56,7 @@ function createWidget(attribute:Attribute):Widget<any>{
             widget = new EnumWidget(attribute as EnumAttribute)
             break;
         case DataType.pointer:
-            widget = new PointerWidget(attribute as PointerAttribute)
+            widget = new PointerWidget(attribute as PointerAttribute,selfid)
             break;
         default://text
             widget = new TextWidget()
@@ -65,7 +65,7 @@ function createWidget(attribute:Attribute):Widget<any>{
     return widget
 }
 
-function createFilterWidget(attribute:Attribute):Widget<any>{
+function createFilterWidget(attribute:Attribute, selfid:string):Widget<any>{
     var widget:Widget<any>
     switch (attribute.dataType) {
         case DataType.boolean:
@@ -87,7 +87,7 @@ function createFilterWidget(attribute:Attribute):Widget<any>{
             widget = new EnumWidget(attribute as EnumAttribute)
             break;
         case DataType.pointer:
-            widget = new PointerWidget(attribute as PointerAttribute)
+            widget = new PointerWidget(attribute as PointerAttribute, selfid)
             break;
         default://text
             //regex

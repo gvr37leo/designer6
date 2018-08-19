@@ -130,13 +130,13 @@ class GridView{
                 return clearablewidget.element
             }],(obj, i) => {
                 // offline load pointerwidget maybe
-                var widget = createWidget(attribute)
-                if(attribute.dataType == DataType.pointer){
-                    var result = getreffedCachedObject(obj,attribute as PointerAttribute,this.reffedObjects);
-                    (widget as PointerWidget).setOfflineDisplay(result.object , result.list)
-                }else{
+                var widget = createWidget(attribute,obj._id)
+                // if(attribute.dataType == DataType.pointer){
+                //     var result = getreffedCachedObject(obj,attribute as PointerAttribute,this.reffedObjects);
+                //     (widget as PointerWidget).setOfflineDisplay(result.object , result.list)
+                // }else{
                     widget.value.set(obj[attribute.name])
-                }
+                // }
                 
                 widget.value.onchange.listen(val => {
                     obj[attribute.name] = val

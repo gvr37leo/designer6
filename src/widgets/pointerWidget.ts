@@ -8,9 +8,11 @@ class PointerWidget extends Widget<string>{
     reffedObject: ObjDef;
     dropdownattribute: Attribute;
     private offlineMode: boolean;
+    selfid: string;
 
-    constructor(attribute:PointerAttribute){
+    constructor(attribute:PointerAttribute,selfid:string){
         super()
+        this.selfid = selfid
         this.query = {
             filter:{},
             paging:{
@@ -90,6 +92,7 @@ class PointerWidget extends Widget<string>{
             }
         })
         
+        this.sync()
         //maybe call setofflinedisplay from here
         // this.setOfflineDisplay(df,prefetchedCollections.get(objidmap.get(attribute.pointsToObject).name))
     }
@@ -104,8 +107,7 @@ class PointerWidget extends Widget<string>{
     sync(){
         if(this.attribute.filterOnAttribute){
             var fonAttribute = attributeidmap.get(this.attribute.filterOnAttribute)
-            // get id of the object this pointer belongsto
-            // this.query.filter[fonAttribute.name] = '5b50c4c043d90e109cccfc75'
+            this.query.filter[fonAttribute.name] = this.selfid
         }
         return getList(this.reffedObject.name,this.query).then(data => {
             //faulty querys make getlist retun null and cause nullpointer exceptions

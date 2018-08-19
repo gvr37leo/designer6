@@ -8,6 +8,9 @@
 /// <reference path="modal.ts" />
 
 // pointerfilters
+// object meegeven aan pointerwidgets
+// abstract functie of zoiets toevoegen om het preloaden van pointerwidgets goed te laten gaan
+// preloaden van gefilterde ajax calls op gridview niveau doen voor pointerwidgets
 // naam pointers vervangen met id pointers
 
 var globalModal:Modal
