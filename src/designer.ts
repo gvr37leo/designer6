@@ -7,8 +7,7 @@
 /// <reference path="views/gridView.ts" />
 /// <reference path="modal.ts" />
 
-// pointerfilters
-// object meegeven aan pointerwidgets
+// 404
 // abstract functie of zoiets toevoegen om het preloaden van pointerwidgets goed te laten gaan
 // preloaden van gefilterde ajax calls op gridview niveau doen voor pointerwidgets
 // naam pointers vervangen met id pointers
