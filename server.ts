@@ -108,7 +108,9 @@ function start(){
             if(query.filter._id){
                 query.filter._id = new mongodb.ObjectID(query.filter._id)
             }
-            maincollection.find(query.filter).sort(query.sort).skip(query.paging.skip).limit(query.paging.limit).toArray(function(err, result){
+            var cursor = maincollection.find(query.filter).sort(query.sort).skip(query.paging.skip).limit(query.paging.limit)
+            
+            cursor.toArray(function(err, result){
                 var reffefObjects:{[k:string]:{[s:string]:any}} = {}
                 var reffedObjectsIdHolder:Map<string,Set<string>> = new Map()
 
