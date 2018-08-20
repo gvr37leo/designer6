@@ -19,6 +19,7 @@ type Paging = {
 type QueryResult<T> = {
     data:T[]
     collectionSize:number
+    dataSize:number
     reffedObjects:{[k:string]:{[s:string]:any}}
 }
 

@@ -154,12 +154,15 @@ function start(){
                         }
                     }
 
-                    maincollection.countDocuments({}).then((count) => {
-                        res.send({
-                            data:result,
-                            collectionSize:count,
-                            reffedObjects:reffefObjects
-                        });
+                    cursor.count().then(resultSize => {
+                        maincollection.countDocuments({}).then((count) => {
+                            res.send({
+                                data:result,
+                                dataSize:resultSize,
+                                collectionSize:count,
+                                reffedObjects:reffefObjects
+                            });
+                        })
                     })
                 })
             })

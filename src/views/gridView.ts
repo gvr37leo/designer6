@@ -177,7 +177,7 @@ class GridView{
             
             this.table.load(res.data)
             //maybe offlineload pointerwidgets here
-            var max = Math.floor(res.collectionSize / this.query.paging.limit)
+            var max = Math.floor(res.dataSize / this.query.paging.limit)
             this.skipwidget.inputel.max = max.toString()
             this.skipwidget.inputel.disabled = !max
             this.tablecontainer.appendChild(this.table.element)
