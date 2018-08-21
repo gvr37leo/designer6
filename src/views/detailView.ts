@@ -95,7 +95,7 @@ class DetailView{
 
         get(this.objdef,id).then(val => {
             if(val == null){
-                //nullptr 404
+                toastr.error('404')
             }else{
                 this.loadCached(val)
                 for(var widget of this.widgetmap.values()){

@@ -65,7 +65,7 @@ function createWidget(attribute:Attribute,selfid:string):Widget<any>{
     return widget
 }
 
-function createFilterWidget(attribute:Attribute, selfid:string):Widget<any>{
+function createFilterWidget(attribute:Attribute):Widget<any>{
     var widget:Widget<any>
     switch (attribute.dataType) {
         case DataType.boolean:
@@ -87,7 +87,7 @@ function createFilterWidget(attribute:Attribute, selfid:string):Widget<any>{
             widget = new EnumWidget(attribute as EnumAttribute)
             break;
         case DataType.pointer:
-            widget = new PointerWidget(attribute as PointerAttribute, selfid)
+            widget = new PointerWidget(attribute as PointerAttribute, undefined)
             break;
         default://text
             //regex

@@ -58,10 +58,18 @@ class Designer{
         })
         this.router.listen(new RegExp('^/([a-zA-Z0-9]+)$'), res => {
             var obj = objnamemap.get(res[1])
-            var gridview = new GridView(obj)
-            gridview.sync()
-            this.viewcontainer.innerHTML = ''
-            this.viewcontainer.appendChild(gridview.element)
+            if(obj == null){
+                toastr.error('404')
+                this.viewcontainer.innerHTML = `<div>
+                    <h1>404</h1>
+                    <a href='/'>Home</a>
+                </div>`
+            }else{
+                var gridview = new GridView(obj)
+                gridview.sync()
+                this.viewcontainer.innerHTML = ''
+                this.viewcontainer.appendChild(gridview.element)
+            }
         })
         this.router.listen(new RegExp('^/([a-zA-Z0-9]+)/([a-zA-Z0-9]+)$'), res => {
             var obj = objnamemap.get(res[1])
