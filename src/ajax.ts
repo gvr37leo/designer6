@@ -57,6 +57,18 @@ function del(objname:string, id:string){
     })
 }
 
+function exportDb(appdef:AppDef){
+    return httpCall(`/api/export`,{
+        headers:{
+            'Content-Type': 'application/json',
+        },
+        body:JSON.stringify({
+            'appdef':appdef,
+        }),
+        method:'POST',
+    })
+}
+
 function httpCall(url,params){
     var promise = fetch(url,params)
     .then(res => res.json())

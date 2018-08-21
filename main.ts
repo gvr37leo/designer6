@@ -1,36 +1,14 @@
 /// <reference path="src/designer.ts" />
 /// <reference path="src/views/table.ts" />
+/// <reference path="src/generated.ts" />
 
-function generateAppdef(){
-    var query:Query = {
-        filter:{},
-        paging:{
-            limit:0,
-            skip:0
-        },
-        sort:{},
-        reffedAttributes:[],
-    }
-    Promise.all([getList<any>('object',query),getList<any>('attribute',query)]).then(res => {
-        var objects = res[0].data
-        var attributes = res[1].data
-
-        var appdef = new AppDef(
-            objects.map(obj => new ObjDef(obj._id,obj.name,obj.dropdownAttributePointer)),
-            attributes.map(attribute => Attribute.makeAttributeFromObject(attribute))
-        )
-        console.log(appdef)
-        download('appdef',JSON.stringify(appdef, null, '\t'))
-    })
-    
-}
 
 var selfdef = new AppDef([
-    new ObjDef('1','object','1'),
-    new ObjDef('2','attribute','3'),
+    new ObjDef('1','objdefinitions','1'),
+    new ObjDef('2','attributes','3'),
 ],[
     new TextAttribute('1','name','1'),
-    new PointerAttribute('2','dropdownAttribute','1','2','5'),
+    new PointerAttribute('2','dropdownAttributePointer','1','2','5'),
 
     new TextAttribute('3','name','2'),
     new EnumAttribute('4','dataType','2',['text','number','boolean','date','pointer']),
@@ -58,7 +36,11 @@ var appdef = new AppDef([
     new NumberAttribute('11','salaris','3'),
 ])
 
-var designer = new Designer(document.querySelector('#main'), selfdef)
-designer.navbar.element.appendChild(new Button('generate','btn-info',generateAppdef).element)
+var designer = new Designer(document.querySelector('#main'), appdef)
+designer.navbar.element.appendChild(new Button('export','btn-info',() => {
+    exportDb(selfdef).then(res => {
+        download('appdef',JSON.stringify(res, null, '\t'))
+    })
+}).element)
 
 

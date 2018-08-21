@@ -1,6 +1,5 @@
 /// <reference path="src/ajaxDefinitionClasses.ts" />
 
-
 import * as express from "express";
 import * as bodyParser from "body-parser"
 import * as mongodb from "mongodb"
@@ -30,6 +29,21 @@ function start(){
         else {
             console.log('connected to mongo');
         }
+
+        app.post('/api/export', function(req, res){
+            var appdef = req.body.appdef as AppDef
+            var promises = []
+            var exportresult = {}
+            for(var objdef of appdef.objdefinitions){
+                promises.push(db.collection(objdef.name).find({}).toArray())
+            }
+            Promise.all(promises).then(collections => {
+                for(var i = 0; i < collections.length; i++){
+                    exportresult[appdef.objdefinitions[i].name] = collections[i]
+                }
+                res.send(exportresult)
+            })
+        })
     
         app.get('/api/:object', function(req, res){
             var collection = db.collection(req.params.object)
@@ -168,6 +182,9 @@ function start(){
             })
         })
 
+        // app.post('/api/import', function(req, res){
+
+        // })
         
         app.all('/*', function(req, res, next) {
             res.sendFile(path.resolve('index.html'));

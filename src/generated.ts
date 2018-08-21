@@ -1,105 +1,92 @@
 /// <reference path="definition.ts" />
 
 
-var generatedBedrijfTest = {
+var persoonbedrijfgenerated = {
 	"objdefinitions": [
 		{
-			"attributes": [],
-			"passiveAttributes": [],
-			"referencedAttributes": [],
-			"_id": "5b50c4c043d90e109cccfc75",
-			"name": "persoon"
+			"_id": "5b7c9158a5a4792f2ceed2ed",
+			"name": "persoon",
+			"lastupdate": 1534890435240,
+			"dropdownAttributePointer": "5b7c917ea5a4792f2ceed2f0"
 		},
 		{
-			"attributes": [],
-			"passiveAttributes": [],
-			"referencedAttributes": [],
-			"_id": "5b50c4ed43d90e109cccfc76",
-			"name": "bedrijf"
+			"_id": "5b7c9160a5a4792f2ceed2ee",
+			"name": "bedrijf",
+			"lastupdate": 1534890563025,
+			"dropdownAttributePointer": "5b7c91cea5a4792f2ceed2f4"
 		},
 		{
-			"attributes": [],
-			"passiveAttributes": [],
-			"referencedAttributes": [],
-			"_id": "5b50c50643d90e109cccfc77",
-			"name": "persoonWerktBijBedrijf"
+			"_id": "5b7c916ba5a4792f2ceed2ef",
+			"name": "persoonWerktBijBedrijf",
+			"lastupdate": 1534890347736
 		}
 	],
 	"attributes": [
 		{
-			"_id": "5b50c54743d90e109cccfc78",
+			"_id": "5b7c917ea5a4792f2ceed2f0",
+			"belongsToObject": "5b7c9158a5a4792f2ceed2ed",
 			"name": "name",
-			"belongsToObject": "5b50c4c043d90e109cccfc75",
-			"dataType": "text"
+			"dataType": "text",
+			"lastupdate": 1534890366904
 		},
 		{
-			"_id": "5b50c56f43d90e109cccfc79",
-			"name": "homeless",
-			"belongsToObject": "5b50c4c043d90e109cccfc75",
-			"dataType": "boolean"
-		},
-		{
-			"_id": "5b50c57843d90e109cccfc7a",
+			"_id": "5b7c9191a5a4792f2ceed2f1",
+			"belongsToObject": "5b7c9158a5a4792f2ceed2ed",
 			"name": "birthday",
-			"belongsToObject": "5b50c4c043d90e109cccfc75",
-			"dataType": "date"
+			"dataType": "date",
+			"lastupdate": 1534890385455
 		},
 		{
-			"_id": "5b50c57e43d90e109cccfc7b",
-			"name": "lengte",
-			"belongsToObject": "5b50c4c043d90e109cccfc75",
-			"dataType": "number"
-		},
-		{
-			"_id": "5b50c58443d90e109cccfc7c",
-			"name": "vriend",
-			"belongsToObject": "5b50c4c043d90e109cccfc75",
+			"_id": "5b7c919ca5a4792f2ceed2f2",
+			"belongsToObject": "5b7c9158a5a4792f2ceed2ed",
+			"name": "friend",
 			"dataType": "pointer",
-			"pointsToObject": "5b50c4c043d90e109cccfc75",
-			"filterOnAttribute": null,
-			"usingOwnColumn": null
+			"pointsToObject": "5b7c9158a5a4792f2ceed2ed",
+			"lastupdate": 1534890396399
 		},
 		{
-			"_id": "5b50cb3b43d90e109cccfc7d",
+			"_id": "5b7c91aba5a4792f2ceed2f3",
+			"belongsToObject": "5b7c9158a5a4792f2ceed2ed",
+			"dataType": "number",
+			"name": "length",
+			"lastupdate": 1534890411328
+		},
+		{
+			"_id": "5b7c91cea5a4792f2ceed2f4",
+			"belongsToObject": "5b7c9160a5a4792f2ceed2ee",
 			"name": "name",
-			"belongsToObject": "5b50c4ed43d90e109cccfc76",
-			"dataType": "text"
+			"dataType": "text",
+			"lastupdate": 1534890446200
 		},
 		{
-			"_id": "5b50cb4443d90e109cccfc7e",
+			"_id": "5b7c9201a5a4792f2ceed2f6",
+			"belongsToObject": "5b7c9160a5a4792f2ceed2ee",
 			"name": "branch",
-			"belongsToObject": "5b50c4ed43d90e109cccfc76",
-			"dataType": "text"
+			"dataType": "text",
+			"lastupdate": 1534890497800
 		},
 		{
-			"_id": "5b50cb9e43d90e109cccfc7f",
+			"_id": "5b7c9223a5a4792f2ceed2f7",
+			"belongsToObject": "5b7c916ba5a4792f2ceed2ef",
 			"name": "werknemer",
-			"belongsToObject": "5b50c50643d90e109cccfc77",
 			"dataType": "pointer",
-			"pointsToObject": "5b50c4c043d90e109cccfc75",
-			"filterOnAttribute": null,
-			"usingOwnColumn": null
+			"pointsToObject": "5b7c9158a5a4792f2ceed2ed",
+			"lastupdate": 1534890531743
 		},
 		{
-			"_id": "5b50cbb043d90e109cccfc80",
+			"_id": "5b7c9230a5a4792f2ceed2f8",
+			"belongsToObject": "5b7c916ba5a4792f2ceed2ef",
 			"name": "werkgever",
-			"belongsToObject": "5b50c50643d90e109cccfc77",
 			"dataType": "pointer",
-			"pointsToObject": "5b50c4ed43d90e109cccfc76",
-			"filterOnAttribute": null,
-			"usingOwnColumn": null
+			"pointsToObject": "5b7c9160a5a4792f2ceed2ee",
+			"lastupdate": 1534890544263
 		},
 		{
-			"_id": "5b50cbb943d90e109cccfc81",
+			"_id": "5b7c9239a5a4792f2ceed2f9",
+			"belongsToObject": "5b7c916ba5a4792f2ceed2ef",
 			"name": "salaris",
-			"belongsToObject": "5b50c50643d90e109cccfc77",
-			"dataType": "number"
-		},
-		{
-			"_id": "5b50cbec43d90e109cccfc82",
-			"name": "rating",
-			"belongsToObject": "5b50c4ed43d90e109cccfc76",
-			"dataType": "number"
+			"dataType": "number",
+			"lastupdate": 1534890553393
 		}
 	]
 }
