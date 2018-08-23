@@ -36,7 +36,9 @@ var appdef = new AppDef([
     new NumberAttribute('11','salaris','3'),
 ])
 
-var designer = new Designer(document.querySelector('#main'), appdef)
+var designer = new Designer(document.querySelector('#main'), readAppdef(persoonbedrijfgenerated))
+
+
 designer.navbar.element.appendChild(new Button('export','btn-info',() => {
     exportDb(selfdef).then(res => {
         download('appdef',JSON.stringify(res, null, '\t'))

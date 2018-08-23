@@ -1,5 +1,10 @@
 /// <reference path="definition.ts" />
-
+function readAppdef(appdef:any):AppDef{
+	return new AppDef(
+		appdef.objdefinitions.map(obj => new ObjDef(obj._id,obj.name,obj.dropdownAttributePointer)),
+		appdef.attributes.map(attr => Attribute.makeAttributeFromObject(attr))
+	)
+}
 
 var persoonbedrijfgenerated = {
 	"objdefinitions": [
