@@ -16,7 +16,7 @@ class Tabs{
         this.anchor = anchor
         this.element = createAndAppend(anchor,`
             <div>
-                <div class="pb-1 d-flex" id="tabcontainer"></div>
+                <div class="pb-1 d-flex buttongroup" id="tabcontainer"></div>
                 <div class="p-3 greyborder" style="overflow:auto;" id="viewcontainer"></div>
             </div>
         `)
@@ -29,7 +29,7 @@ class Tabs{
 
     addTab(id:string,text:string, renderer:() => void){
         this.tabmap.set(id,renderer)
-        var button = new Button(text,'btn-primary', () => {
+        var button = new Button(text,'btn-primary buttonchild', () => {
             this.selectTab(id)
 
         })
