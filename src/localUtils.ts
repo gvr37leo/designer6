@@ -81,7 +81,7 @@ function createFilterWidget(attribute:Attribute):Widget<any>{
             widget = new FromToWidget(DateWidget)
             break;
         case DataType.id:
-            widget = new IDWidget(attribute as IdentityAttribute)
+            widget = new TextWidget()
             break;
         case DataType.enum:
             widget = new EnumWidget(attribute as EnumAttribute)
